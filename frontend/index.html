@@ -1050,9 +1050,8 @@
         setTimeout(() => { document.body.style.opacity = '1'; }, 100);
 
         // نظام متابعة سير العملية
-        // تحديد API_BASE بناء على عنوان الصفحة الحالية
-        const currentHost = window.location.hostname;
-        const API_BASE = `http://${currentHost}:5000/api`;
+        // استخدام المسار النسبي للـ API عبر Nginx
+        const API_BASE = '/api';
         let allRequests = [];
         let topNotifications = [];
         let topNotificationsIntervalId = null;

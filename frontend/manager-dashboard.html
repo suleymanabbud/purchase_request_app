@@ -676,9 +676,8 @@
     </div>
 
     <script>
-        // تحديد API_BASE بناء على عنوان الصفحة الحالية
-        const currentHost = window.location.hostname;
-        const API_BASE = `http://${currentHost}:5000/api`;
+        // استخدام المسار النسبي للـ API عبر Nginx
+        const API_BASE = '/api';
         let currentRequestId = null;
         let allRequests = [];
         let filteredRequests = [];

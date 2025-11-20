@@ -1,7 +1,7 @@
 'use strict';
 
-const currentHost = window.location.hostname;
-const API_BASE = `http://${currentHost}:5000/api`;
+// استخدام المسار النسبي للـ API عبر Nginx
+const API_BASE = '/api';
 
 let allRequests = [];
 let filteredRequests = [];
