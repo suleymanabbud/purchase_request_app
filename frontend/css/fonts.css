@@ -1,0 +1,50 @@
+/* تعريف الخطوط العربية المحلية */
+@font-face {
+    font-family: 'Qomra Arabic';
+    src: url('../fonts/itfQomraArabic-Light.otf') format('opentype');
+    font-weight: 300;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Qomra Arabic';
+    src: url('../fonts/itfQomraArabic-Regular.otf') format('opentype');
+    font-weight: 400;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Qomra Arabic';
+    src: url('../fonts/itfQomraArabic-Medium.otf') format('opentype');
+    font-weight: 500;
+    font-style: normal;
+}
+
+/* تطبيق الخط على كل العناصر */
+* {
+    font-family: 'Qomra Arabic', 'Tajawal', 'Amiri', Arial, sans-serif !important;
+}
+
+body {
+    font-family: 'Qomra Arabic', 'Tajawal', Arial, sans-serif !important;
+}
+
+/* خطوط العناوين */
+h1, h2, h3, h4, h5, h6,
+.main-title,
+.page-title,
+.section-title,
+.modal-title {
+    font-family: 'Qomra Arabic', 'Amiri', serif !important;
+    font-weight: 500;
+}
+
+/* الأزرار والنماذج */
+button, input, select, textarea {
+    font-family: 'Qomra Arabic', 'Tajawal', Arial, sans-serif !important;
+}
+
+/* الجداول */
+table, th, td {
+    font-family: 'Qomra Arabic', 'Tajawal', Arial, sans-serif !important;
+}

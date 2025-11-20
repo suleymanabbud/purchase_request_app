@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>طلب شراء</title>
+    <link rel="stylesheet" href="./css/fonts.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" integrity="sha512-yH0/jcKrrO5gYv7FpC18m0tHbdD+fQ6gttxyPjdvVSxGInxjeRGna43EIBgzHuLlHotE5T7BC6czS4Ez+IwBbw==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="./css/style.css" />
+    <style>
+        .notification-wrapper {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+        .notification-btn {
+            background: #427f77;
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 13px;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .notification-btn:hover {
+            background: #2f5a54;
+        }
+        .notification-counter {
+            background: #e74c3c;
+            color: #fff;
+            font-size: 11px;
+            min-width: 18px;
+            min-height: 18px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            padding: 2px 6px;
+        }
+        .notifications-popover {
+            position: absolute;
+            top: 65px;
+            left: 40px;
+            width: 280px;
+            max-height: 320px;
+            overflow-y: auto;
+            background: #fff;
+            border: 1px solid #dcdcdc;
+            border-radius: 10px;
+            box-shadow: 0 12px 24px rgba(0,0,0,0.15);
+            display: none;
+            flex-direction: column;
+            z-index: 50;
+        }
+        .notifications-popover.active {
+            display: flex;
+        }
+        .notifications-popover header {
+            padding: 10px 14px;
+            border-bottom: 1px solid #f0f0f0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 13px;
+            font-weight: 600;
+        }
+        .notifications-popover ul {
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        .notifications-popover li {
+            padding: 12px 14px;
+            border-bottom: 1px solid #f5f5f5;
+            font-size: 12px;
+        }
+        .notifications-popover li.unread {
+            background: #f7fbff;
+        }
+        .notifications-popover li small {
+            display: block;
+            margin-top: 6px;
+            color: #7f8c8d;
+        }
+        .notifications-popover button {
+            border: none;
+            background: none;
+            color: #427f77;
+            cursor: pointer;
+            font-size: 12px;
+        }
+    </style>
+</head>
+<body>
+    <div class="document-container" style="position: relative;">
+        <div style="text-align: left; margin-bottom: 10px; display:flex; justify-content: space-between; align-items:center;">
+            <a href="index.html" style="color: #427f77; text-decoration: none; font-weight: bold;">← العودة للرئيسية</a>
+            <div class="notification-wrapper">
+                <button class="notification-btn" id="notificationsBtn"><i class="fas fa-bell"></i> الإشعارات <span class="notification-counter" id="notificationsBadge" style="display:none;">0</span></button>
+                <button class="notification-btn" id="markNotificationsRead" style="background:#888;">
+                    <i class="fas fa-check"></i> تعليم كمقروء
+                </button>
+            </div>
+        </div>
+        <div class="notifications-popover" id="notificationsPopover">
+            <header>
+                <span>الإشعارات الأخيرة</span>
+                <button id="closeNotifications">إغلاق</button>
+            </header>
+            <ul id="notificationsList"></ul>
+        </div>
+        
+            <div>
+                <div class="sarh">صرح القابضة</div>
+                <div class="sarh">Sarh Holding</div>
+            </div>
+        <div class="main-title">طلب شراء - Purchase Request</div>
+
+        <div class="header">
+            <div class="supplier-info">
+                <div class="info-row">
+                    <span class="info-label">مقدم الطلب:</span>
+                    <input type="text" class="info-input" id="requester" placeholder="اسم مقدم الطلب" required>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">القسم الطالب:</span>
+                    <select class="info-input" id="department" required>
+                        <!-- سيتم تعبئة القسم تلقائياً من بيانات المستخدم -->
+                    </select>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">عنوان التسليم:</span>
+                    <input type="text" class="info-input" id="deliveryAddress" placeholder="عنوان التسليم" required>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">موعد التسليم:</span>
+                    <input type="date" class="info-input" id="deliveryDate" required>
+                </div>
+            </div>
+
+            <div class="company-info">
+                <div class="info-row">
+                    <span class="info-label">تاريخ طلب الشراء:</span>
+                    <input type="date" class="info-input" id="orderDate">
+                </div>
+                <div class="info-row">
+                    <span class="info-label">رمز طلب الشراء:</span>
+                    <input type="text" class="info-input" id="orderNumber" value="PR-" pattern="^PR-.*" title='يجب أن يبدأ بـ "PR-" مثل: PR-20251008-001' required>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">رمز المشروع:</span>
+                    <input type="text" class="info-input" id="projectCode" placeholder="رمز المشروع" required>
+                </div>
+                <div class="info-row">
+                    <span class="info-label">العملة:</span>
+                    <select class="currency-select" id="currency">
+                        <option value="SYP">الليرة السورية (SYP)</option>
+                        <option value="USD" selected>الدولار الأمريكي (USD)</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+        <div class="table-section">
+            <table class="items-table" id="itemsTable">
+                <thead>
+                    <tr>
+                        <th style="width: 6%">#</th>
+                        <th style="width: 22%">اسم المادة / الخدمة</th>
+                        <th style="width: 28%">المواصفات الفنية</th>
+                        <th style="width: 8%">الوحدة</th>
+                        <th style="width: 10%">العدد</th>
+                        <th style="width: 12%">السعر التقديري</th>
+                        <th style="width: 14%">المجموع</th>
+                    </tr>
+                </thead>
+                <tbody id="itemsBody">
+                    <tr>
+                        <td>1</td>
+                        <td><textarea placeholder="اسم المادة / الخدمة" rows="2" required></textarea></td>
+                        <td><textarea placeholder="المواصفات الفنية" rows="2"></textarea></td>
+                        <td><input type="text" placeholder="قطعة" required></td>
+                        <td><input type="number" min="0" step="0.01" oninput="calculateGrandTotal()" required></td>
+                        <td><input type="number" min="0" step="0.01" oninput="calculateGrandTotal()" required></td>
+                        <td class="row-total">0.00</td>
+                    </tr>
+                </tbody>
+                <tfoot>
+                    <tr class="total-row">
+                        <td colspan="6" style="text-align: right; font-weight: bold;">المجموع الكلي:</td>
+                        <td id="grandTotal" style="font-weight: bold;">0.00 $</td>
+                    </tr>
+                </tfoot>
+            </table>
+            <button class="add-row-btn" onclick="addNewRow()">+ إضافة صنف جديد</button>
+            
+            <!-- ملاحظات إضافية -->
+            <div class="additional-notes-section" style="margin-top: 20px;">
+                <h3 style="color: #698163; margin-bottom: 10px;">ملاحظات إضافية:</h3>
+                <textarea id="additionalNotes" 
+                    style="width: 100%; height: 80px; padding: 10px; border: 2px solid #e0e0e0; border-radius: 8px; 
+                           font-family: inherit; font-size: 14px; resize: vertical; 
+                           border-color: #698163; outline: none;"
+                    onfocus="this.style.borderColor='#698163'" 
+                    onblur="this.style.borderColor='#e0e0e0'"></textarea>
+            </div>
+
+            <div class="approval-section">
+                <table class="approval-table">
+                    <thead>
+                        <tr>
+                            <th style="width: 12%">#</th>
+                            <th style="width: 14%">الطالب</th>
+                            <th style="width: 16%">المدير المباشر</th>
+                            <th style="width: 16%">الإدارة المالية</th>
+                            <th style="width: 14%">آمر الصرف</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td class="approval-label">الاسم</td>
+                            <td><input type="text" class="approval-input" placeholder="اسم الطالب"></td>
+                            <td><input type="text" class="approval-input" placeholder="اسم المدير"></td>
+                            <td><input type="text" class="approval-input" placeholder="اسم المسؤول المالي"></td>
+                            <td><input type="text" class="approval-input" placeholder="اسم المخول"></td>
+                        </tr>
+                        <tr>
+                            <td class="approval-label">المنصب</td>
+                            <td><input type="text" class="approval-input" placeholder="منصب الطالب"></td>
+                            <td><input type="text" class="approval-input" placeholder="مدير القسم"></td>
+                            <td><input type="text" class="approval-input" placeholder="مدير مالي"></td>
+                            <td><input type="text" class="approval-input" placeholder="مدير الصرف"></td>
+                        </tr>
+                        <tr>
+                            <td class="approval-label">التاريخ</td>
+                            <td><input type="date" class="approval-input"></td>
+                            <td><input type="date" class="approval-input"></td>
+                            <td><input type="date" class="approval-input"></td>
+                            <td><input type="date" class="approval-input"></td>
+                        </tr>
+                        <tr class="signature-row">
+                            <td class="approval-label">التوقيع</td>
+                            <td class="signature-cell"></td>
+                            <td class="signature-cell"></td>
+                            <td class="signature-cell"></td>
+                            <td class="signature-cell"></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap">
+            <button class="print-btn" id="printBtn" onclick="printDocument()" disabled>🖨️ طباعة الطلب</button>
+            <button class="print-btn" id="saveBtn" onclick="savePurchaseRequest()">💾 حفظ الطلب</button>
+        </div>
+    </div>
+
+    <script src="./js/main.js"></script>
+    
+    <script>
+        // دالة بسيطة للطباعة
+        function printDocument() {
+            window.print();
+        }
+    </script>
+</body>
+</html>

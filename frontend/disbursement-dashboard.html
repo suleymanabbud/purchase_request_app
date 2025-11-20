@@ -1,0 +1,1640 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة تحكم أمر الصرف - طلبات الشراء</title>
+    <link rel="stylesheet" href="./css/fonts.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        body {
+            box-sizing: border-box;
+        }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Tajawal', Arial, sans-serif;
+            background: #f5f7fa;
+            direction: rtl;
+            min-height: 100%;
+        }
+        html {
+            height: 100%;
+        }
+        .dashboard-container {
+            display: flex;
+            min-height: 100vh;
+        }
+        /* Sidebar */
+        .sidebar {
+            width: 280px;
+            background: linear-gradient(180deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 0;
+            box-shadow: 2px 0 10px rgba(0,0,0,0.1);
+        }
+        .sidebar-header {
+            padding: 30px 20px;
+            text-align: center;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        .sidebar-header h2 {
+            font-family: 'Amiri', serif;
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+        .sidebar-header p {
+            font-size: 14px;
+            opacity: 0.8;
+        }
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-right: 3px solid transparent;
+        }
+        .menu-item:hover, .menu-item.active {
+            background: rgba(255,255,255,0.1);
+            border-right-color: #3498db;
+        }
+        .menu-item i {
+            margin-left: 15px;
+            width: 20px;
+            text-align: center;
+        }
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 0;
+        }
+        .top-bar {
+            background: white;
+            padding: 20px 30px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .page-title {
+            font-size: 28px;
+            font-weight: 700;
+            color: #2c3e50;
+            font-family: 'Amiri', serif;
+        }
+        .user-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .user-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: #3498db;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+        .logout-btn {
+            background: #e74c3c;
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+        .logout-btn:hover {
+            background: #c0392b;
+        }
+        /* Dashboard Stats */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 30px;
+        }
+        .stat-card {
+            background: white;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            transition: transform 0.3s ease;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-icon {
+            width: 60px;
+            height: 60px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+        }
+        .stat-icon.pending {
+            background: #f39c12;
+        }
+        .stat-icon.approved {
+            background: #27ae60;
+        }
+        .stat-icon.rejected {
+            background: #e74c3c;
+        }
+        .stat-icon.total {
+            background: #3498db;
+        }
+        .stat-info h3 {
+            font-size: 32px;
+            font-weight: 700;
+            color: #2c3e50;
+            margin-bottom: 5px;
+        }
+        .stat-info p {
+            color: #7f8c8d;
+            font-size: 14px;
+        }
+        /* Filters */
+        .filters-section {
+            background: white;
+            margin: 0 30px;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            margin-bottom: 20px;
+        }
+        .filters-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 20px;
+            align-items: end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .filter-label {
+            font-weight: 600;
+            color: #2c3e50;
+            font-size: 14px;
+        }
+        .filter-input, .filter-select {
+            padding: 12px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-family: 'Tajawal', Arial, sans-serif;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+        .filter-input:focus, .filter-select:focus {
+            outline: none;
+            border-color: #427f77;
+        }
+        .filter-btn {
+            padding: 12px 25px;
+            background: #427f77;
+            color: white;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-family: 'Tajawal', Arial, sans-serif;
+            font-weight: 600;
+            transition: background 0.3s ease;
+        }
+        .filter-btn:hover {
+            background: #094239;
+        }
+        /* Requests Table */
+        .requests-section {
+            background: white;
+            margin: 0 30px 30px;
+            border-radius: 15px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .section-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .section-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #161616;
+        }
+        .requests-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .requests-table th {
+            background: #eeeadf;
+            padding: 15px 12px;
+            text-align: center;
+            font-weight: 600;
+            color: #161616;
+            font-size: 14px;
+            border-bottom: 1px solid #978362;
+        }
+        .requests-table td {
+            padding: 15px 12px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+        .requests-table tbody tr:hover {
+            background: #eeeadf;
+        }
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        .status-pending {
+            background: #b7a678;
+            color: #ffffff;
+        }
+        .status-approved {
+            background: #427f77;
+            color: #ffffff;
+        }
+        .status-rejected {
+            background: #3c3a3b;
+            color: #ffffff;
+        }
+        .action-btn {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            font-weight: 600;
+            margin: 0 3px;
+            transition: all 0.3s ease;
+        }
+        .btn-view {
+            background: #094239;
+            color: white;
+        }
+        .btn-approve {
+            background: #427f77;
+            color: white;
+        }
+        .btn-reject {
+            background: #3c3a3b;
+            color: white;
+        }
+        .action-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+        }
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            right: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+        }
+        .modal-content {
+            background: white;
+            margin: 5% auto;
+            padding: 0;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+            max-height: 80vh;
+            overflow-y: auto;
+        }
+        .modal-header {
+            padding: 25px 30px;
+            border-bottom: 1px solid #978362;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #eeeadf;
+            border-radius: 15px 15px 0 0;
+        }
+        .modal-title {
+            font-size: 20px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 24px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        .modal-body {
+            padding: 30px;
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .detail-label {
+            font-weight: 600;
+            color: #7f8c8d;
+            font-size: 12px;
+            text-transform: uppercase;
+        }
+        .detail-value {
+            font-size: 16px;
+            color: #2c3e50;
+        }
+        .items-list {
+            margin-top: 20px;
+        }
+        .items-table-modal {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 15px;
+        }
+        .items-table-modal th, .items-table-modal td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #e0e0e0;
+        }
+        .items-table-modal th {
+            background: #f8f9fa;
+            font-weight: 600;
+        }
+        .modal-actions {
+            padding: 20px 30px;
+            border-top: 1px solid #e0e0e0;
+            display: flex;
+            gap: 15px;
+            justify-content: flex-end;
+        }
+        @media (max-width: 768px) {
+            .dashboard-container {
+                flex-direction: column;
+            }
+            .sidebar {
+                width: 100%;
+                position: relative;
+            }
+            .stats-grid {
+                grid-template-columns: 1fr;
+                padding: 20px;
+            }
+            .filters-grid {
+                grid-template-columns: 1fr;
+            }
+            .requests-section {
+                margin: 0 20px 20px;
+                overflow-x: auto;
+            }
+            .requests-table {
+                min-width: 800px;
+            }
+        }
+    </style>
+    
+    <!-- إعدادات الطباعة -->
+    <style>
+        @media print {
+            .navigation, .nav-btn, .user-dropdown, .top-bar, .logout-btn, .action-btn, .filter-section, .sidebar-overlay, .dropdown-menu, .notification {
+                display: none !important;
+            }
+            body { 
+                font-size: 12px; 
+                color: #000; 
+                background: #fff; 
+            }
+            .app-container { 
+                box-shadow: none; 
+                border: none; 
+            }
+            .app-content { 
+                padding: 0; 
+            }
+            button, .btn, .nav-btn { 
+                display: none !important; 
+            }
+            /* إظهار وصف المادة كاملاً في الطباعة */
+            .item-description, .description-cell, textarea, input[type="text"] {
+                white-space: normal !important;
+                word-wrap: break-word !important;
+                max-width: none !important;
+                overflow: visible !important;
+                text-overflow: unset !important;
+                height: auto !important;
+                min-height: auto !important;
+                max-height: none !important;
+                display: block !important;
+            }
+            /* تحسين الجداول للطباعة */
+            table {
+                page-break-inside: avoid;
+                width: 100% !important;
+            }
+            td, th {
+                vertical-align: top !important;
+                padding: 5px !important;
+                border: 1px solid #000 !important;
+            }
+            /* إظهار محتوى textarea في الطباعة */
+            textarea {
+                border: 1px solid #000 !important;
+                background: #fff !important;
+                color: #000 !important;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="dashboard-container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h2>صرح القابضة</h2>
+                <p>لوحة تحكم أمر الصرف</p>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" onclick="showPendingRequests()">
+                    <i class="fas fa-shopping-cart"></i>
+                    طلبات الشراء
+                </a>
+                <a href="#" class="menu-item" onclick="showApprovedRequests()">
+                    <i class="fas fa-check-circle"></i>
+                    الطلبات المعتمدة
+                </a>
+                <a href="#" class="menu-item" onclick="showRejectedRequests()">
+                    <i class="fas fa-times-circle"></i>
+                    الطلبات المرفوضة
+                </a>
+                <a href="#" class="menu-item" onclick="showDisbursementReports()">
+                    <i class="fas fa-chart-bar"></i>
+                    تقارير الصرف
+                </a>
+                <a href="#" class="menu-item">
+                    <i class="fas fa-cog"></i>
+                    الإعدادات
+                </a>
+            </nav>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Top Bar -->
+            <div class="top-bar">
+                <h1 class="page-title">طلبات الشراء - أمر الصرف</h1>
+                <div class="user-info">
+                    <span id="userName">مرحباً، أمر الصرف</span>
+                    <div class="user-avatar" id="userAvatar">ص</div>
+                    <button class="logout-btn" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> تسجيل الخروج
+                    </button>
+                </div>
+            </div>
+
+            <!-- Stats Grid -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-icon total">
+                        <i class="fas fa-shopping-cart"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="totalRequests">0</h3>
+                        <p>إجمالي الطلبات</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon pending">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="pendingRequests">0</h3>
+                        <p>في انتظار الصرف</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon approved">
+                        <i class="fas fa-check"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="approvedRequests">0</h3>
+                        <p>تم الصرف</p>
+                    </div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-icon rejected">
+                        <i class="fas fa-times"></i>
+                    </div>
+                    <div class="stat-info">
+                        <h3 id="rejectedRequests">0</h3>
+                        <p>تم الرفض</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Filters -->
+            <div class="filters-section">
+                <div class="filters-grid">
+                    <div class="filter-group">
+                        <label class="filter-label">البحث</label>
+                        <input type="text" class="filter-input" id="searchInput" placeholder="البحث برقم الطلب أو اسم مقدم الطلب">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">الحالة</label>
+                        <select class="filter-select" id="statusFilter">
+                            <option value="">جميع الحالات</option>
+                            <option value="pending_disbursement">في انتظار الصرف</option>
+                            <option value="approved">تم الصرف</option>
+                            <option value="rejected">تم الرفض</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">القسم</label>
+                        <select class="filter-select" id="departmentFilter">
+                            <option value="">جميع الأقسام</option>
+                            <option value="الإدارة المالية">الإدارة المالية</option>
+                            <option value="إدارة الموارد البشرية">إدارة الموارد البشرية</option>
+                            <option value="إدارة تطوير العمليات">إدارة تطوير العمليات</option>
+                            <option value="العمليات">العمليات</option>
+                        </select>
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">من تاريخ</label>
+                        <input type="date" class="filter-input" id="dateFromFilter">
+                    </div>
+                    <div class="filter-group">
+                        <label class="filter-label">إلى تاريخ</label>
+                        <input type="date" class="filter-input" id="dateToFilter">
+                    </div>
+                    <div class="filter-group">
+                        <button class="filter-btn" onclick="applyFilters()">
+                            <i class="fas fa-search"></i> بحث
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Requests Table -->
+            <div class="requests-section">
+                <div class="section-header">
+                    <h3 class="section-title">قائمة طلبات الشراء</h3>
+                </div>
+                <table class="requests-table">
+                    <thead>
+                        <tr>
+                            <th>رقم الطلب</th>
+                            <th>مقدم الطلب</th>
+                            <th>القسم</th>
+                            <th>تاريخ الطلب</th>
+                            <th>المبلغ الإجمالي</th>
+                            <th>الحالة</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="requestsTableBody">
+                        <!-- Data will be populated by JavaScript -->
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal for Request Details -->
+    <div id="requestModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">تفاصيل طلب الشراء</h3>
+                <button class="close-btn" onclick="closeModal()">&times;</button>
+            </div>
+            <div class="modal-body" id="modalBody">
+                <!-- Content will be populated by JavaScript -->
+            </div>
+            <div class="modal-actions">
+                <button class="action-btn btn-approve" onclick="updateStatus('approve')">
+                    <i class="fas fa-check"></i> إصدار أمر الصرف
+                </button>
+                <button class="action-btn btn-reject" onclick="updateStatus('reject')">
+                    <i class="fas fa-times"></i> رفض
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // تحديد API_BASE بناء على عنوان الصفحة الحالية
+        const currentHost = window.location.hostname;
+        const API_BASE = `http://${currentHost}:5000/api`;
+        let currentRequestId = null;
+        let allRequests = [];
+        let filteredRequests = [];
+
+        // Initialize dashboard
+        document.addEventListener('DOMContentLoaded', function() {
+            checkAuth();
+            enforceRoleAccess('disbursement');
+            loadUserInfo();
+            loadRequests();
+        });
+
+        function enforceRoleAccess(requiredRole) {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            if (!user.role) return;
+            if (user.role !== requiredRole) {
+                if (user.role === 'admin') {
+                    window.location.href = 'admin-dashboard.html';
+                } else if (user.role === 'manager') {
+                    window.location.href = 'manager-dashboard.html';
+                } else if (user.role === 'finance') {
+                    window.location.href = 'finance-dashboard.html';
+                } else if (user.role === 'requester') {
+                    window.location.href = 'index.html';
+                } else {
+                    window.location.href = 'login.html';
+                }
+            }
+        }
+
+        function checkAuth() {
+            const token = localStorage.getItem('token');
+            if (!token) {
+                window.location.href = 'login.html';
+                return;
+            }
+        }
+
+        function loadUserInfo() {
+            const user = JSON.parse(localStorage.getItem('user') || '{}');
+            document.getElementById('userName').textContent = `مرحباً، ${user.full_name || user.username}`;
+            document.getElementById('userAvatar').textContent = (user.full_name || user.username).charAt(0);
+        }
+
+        async function loadRequests() {
+            try {
+                console.log('🔄 تحميل طلبات أمر الصرف...');
+                const response = await fetch(`${API_BASE}/my/queue`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    const payload = await response.json();
+                    let requestsData = [];
+                    if (Array.isArray(payload)) requestsData = payload;
+                    else requestsData = payload.requests || [];
+
+                    allRequests = requestsData;
+                    console.log('📊 طلبات أمر الصرف المحملة:', allRequests);
+                    filteredRequests = [...allRequests];
+
+                    if (!Array.isArray(payload)) {
+                        if (payload.total !== undefined) document.getElementById('totalRequests').textContent = payload.total;
+                        if (payload.approved !== undefined) document.getElementById('approvedRequests').textContent = payload.approved;
+                        if (payload.rejected !== undefined) document.getElementById('rejectedRequests').textContent = payload.rejected;
+                        if (payload.pending !== undefined) document.getElementById('pendingRequests').textContent = payload.pending;
+                    }
+
+                    updateStats();
+                    renderRequestsTable();
+                } else if (response.status === 401) {
+                    logout();
+                } else {
+                    console.error('Failed to load requests');
+                }
+            } catch (error) {
+                console.error('Error loading requests:', error);
+            }
+        }
+
+        function updateStats() {
+            console.log('📊 تحديث إحصائيات أمر الصرف...');
+            console.log('📋 جميع الطلبات:', allRequests);
+            
+            const pending = allRequests.filter(r => (r.status || 'pending_manager') === 'pending_disbursement').length;
+            console.log(`📈 الإحصائيات: في انتظار أمر الصرف=${pending}`);
+            document.getElementById('pendingRequests').textContent = pending;
+        }
+
+        // تحميل إحصائيات عامة من endpoint العام لاستخراج إجمالي/الموافقات/الرفض
+        async function loadGlobalStats() {
+            try {
+                const resp = await fetch(`${API_BASE}/requests`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                if (!resp.ok) return;
+                const all = await resp.json();
+                const total = all.length;
+                const approved = all.filter(r => (r.status || 'pending_manager') === 'approved').length;
+                const rejected = all.filter(r => (r.status || 'pending_manager') === 'rejected').length;
+                console.log(`🔢 إحصائيات عامة: إجمالي=${total}, معتمد=${approved}, مرفوض=${rejected}`);
+                document.getElementById('totalRequests').textContent = total;
+                document.getElementById('approvedRequests').textContent = approved;
+                document.getElementById('rejectedRequests').textContent = rejected;
+            } catch (err) {
+                console.warn('تعذر جلب الإحصائيات العامة:', err);
+            }
+        }
+
+        function renderRequestsTable() {
+            console.log('🔄 عرض جدول طلبات أمر الصرف...');
+            const tbody = document.getElementById('requestsTableBody');
+            tbody.innerHTML = '';
+            
+            console.log('📋 الطلبات المتاحة للفلترة:', filteredRequests);
+            
+            // فلترة الطلبات - أمر الصرف يرى فقط pending_disbursement
+            const displayRequests = filteredRequests.filter(r => {
+                const status = r.status || 'pending_manager';
+                console.log(`🔍 فحص طلب ${r.id}: الحالة=${status}, يطابق pending_disbursement=${status === 'pending_disbursement'}`);
+                return status === 'pending_disbursement';
+            });
+            
+            console.log(`🔄 عرض ${displayRequests.length} طلب في الجدول (من ${filteredRequests.length} إجمالي)`);
+            console.log('📊 الطلبات المعروضة:', displayRequests);
+
+            displayRequests.forEach(request => {
+                const row = document.createElement('tr');
+                const status = request.status || 'pending_manager';
+                const statusClass = `status-${status}`;
+                const statusText = getStatusText(status);
+                const formattedTotal = formatCurrency(request.total_amount, request.currency);
+
+                row.innerHTML = `
+                    <td>${request.order_number || request.id}</td>
+                    <td>${request.requester}</td>
+                    <td>${request.department}</td>
+                    <td>${request.date || '-'}</td>
+                    <td>${formattedTotal}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn btn-view" onclick="viewRequest(${request.id})">
+                            <i class="fas fa-eye"></i> عرض
+                        </button>
+                        ${request.status !== 'approved' && request.status !== 'rejected' ? `
+                            <button class="action-btn btn-approve" onclick="quickUpdateStatus(${request.id}, 'approve')">
+                                <i class="fas fa-check"></i> إصدار أمر الصرف
+                            </button>
+                            <button class="action-btn btn-reject" onclick="quickUpdateStatus(${request.id}, 'reject')">
+                                <i class="fas fa-times"></i> رفض
+                            </button>
+                        ` : ''}
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        // إدارة الطلبات المعتمدة/المرفوضة لأمر الصرف
+        let approvedRequests = [];
+        let rejectedRequests = [];
+
+        async function showApprovedRequests() {
+            currentView = 'approved';
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            
+            // تفعيل العنصر المناسب
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                if (item.textContent.includes('الطلبات المعتمدة')) {
+                    item.classList.add('active');
+                }
+            });
+
+            document.querySelector('.page-title').textContent = 'الطلبات المعتمدة';
+            document.querySelector('.filters-section').style.display = 'block';
+            document.querySelector('.requests-section').style.display = 'block';
+
+            try {
+                const response = await fetch(`${API_BASE}/requests?status=approved`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                if (response.ok) {
+                    const payload = await response.json();
+                    approvedRequests = Array.isArray(payload) ? payload : (payload.requests || []);
+                    await loadGlobalStats();
+                    renderApprovedRequestsTable();
+                } else if (response.status === 401) {
+                    logout();
+                }
+            } catch (e) {
+                console.error('Error loading approved requests:', e);
+            }
+        }
+
+        async function showRejectedRequests() {
+            currentView = 'rejected';
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            
+            const menuItems = document.querySelectorAll('.menu-item');
+            menuItems.forEach(item => {
+                if (item.textContent.includes('الطلبات المرفوضة')) {
+                    item.classList.add('active');
+                }
+            });
+
+            document.querySelector('.page-title').textContent = 'الطلبات المرفوضة';
+            document.querySelector('.filters-section').style.display = 'block';
+            document.querySelector('.requests-section').style.display = 'block';
+
+            try {
+                const response = await fetch(`${API_BASE}/requests?status=rejected`, {
+                    headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }
+                });
+                if (response.ok) {
+                    const payload = await response.json();
+                    rejectedRequests = Array.isArray(payload) ? payload : (payload.requests || []);
+                    await loadGlobalStats();
+                    renderRejectedRequestsTable();
+                } else if (response.status === 401) {
+                    logout();
+                }
+            } catch (e) {
+                console.error('Error loading rejected requests:', e);
+            }
+        }
+
+        function renderApprovedRequestsTable() {
+            const tbody = document.getElementById('requestsTableBody');
+            tbody.innerHTML = '';
+            approvedRequests.forEach(request => {
+                const row = document.createElement('tr');
+                const status = request.status || 'approved';
+                const statusClass = `status-${status}`;
+                const statusText = getStatusText(status);
+                const formattedTotal = formatCurrency(request.total_amount, request.currency);
+                const approvedDate = request.date || '-';
+                row.innerHTML = `
+                    <td>${request.order_number || request.id}</td>
+                    <td>${request.requester}</td>
+                    <td>${request.department}</td>
+                    <td>${approvedDate}</td>
+                    <td>${formattedTotal}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn btn-view" onclick="viewRequest(${request.id})">
+                            <i class="fas fa-eye"></i> عرض
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            if (approvedRequests.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7">لا توجد طلبات معتمدة حالياً.</td></tr>`;
+            }
+        }
+
+        function renderRejectedRequestsTable() {
+            const tbody = document.getElementById('requestsTableBody');
+            tbody.innerHTML = '';
+            rejectedRequests.forEach(request => {
+                const row = document.createElement('tr');
+                const status = request.status || 'rejected';
+                const statusClass = `status-${status}`;
+                const statusText = getStatusText(status);
+                const formattedTotal = formatCurrency(request.total_amount, request.currency);
+                const rejectedDate = request.date || '-';
+                row.innerHTML = `
+                    <td>${request.order_number || request.id}</td>
+                    <td>${request.requester}</td>
+                    <td>${request.department}</td>
+                    <td>${rejectedDate}</td>
+                    <td>${formattedTotal}</td>
+                    <td><span class="status-badge ${statusClass}">${statusText}</span></td>
+                    <td>
+                        <button class="action-btn btn-view" onclick="viewRequest(${request.id})">
+                            <i class="fas fa-eye"></i> عرض
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+            if (rejectedRequests.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="7">لا توجد طلبات مرفوضة حالياً.</td></tr>`;
+            }
+        }
+
+        function getStatusText(status) {
+            const statusMap = {
+                'pending_manager': 'في انتظار المدير المباشر',
+                'pending_finance': 'في انتظار المراجعة المالية',
+                'pending_disbursement': 'في انتظار الصرف',
+                'approved': 'تم الصرف',
+                'rejected': 'تم الرفض'
+            };
+            return statusMap[status] || status || 'غير محدد';
+        }
+
+        function formatCurrency(amount, currency) {
+            if (currency === 'USD') {
+                return `$${amount.toFixed(2)}`;
+            } else {
+                return `${amount.toLocaleString()} ل.س`;
+            }
+        }
+
+        function applyFilters() {
+            const search = document.getElementById('searchInput').value.toLowerCase();
+            const status = document.getElementById('statusFilter').value;
+            const department = document.getElementById('departmentFilter').value;
+            const dateFrom = document.getElementById('dateFromFilter').value;
+            const dateTo = document.getElementById('dateToFilter').value;
+
+            filteredRequests = allRequests.filter(request => {
+                const matchesSearch = !search || 
+                    (request.order_number && request.order_number.toLowerCase().includes(search)) ||
+                    request.requester.toLowerCase().includes(search);
+                const requestStatus = request.status || 'pending_manager';
+                const matchesStatus = !status || requestStatus === status;
+                const matchesDepartment = !department || request.department === department;
+                const matchesDateFrom = !dateFrom || (request.date && request.date >= dateFrom);
+                const matchesDateTo = !dateTo || (request.date && request.date <= dateTo);
+
+                return matchesSearch && matchesStatus && matchesDepartment && matchesDateFrom && matchesDateTo;
+            });
+
+            renderRequestsTable();
+        }
+
+        async function viewRequest(requestId) {
+            let request = allRequests.find(r => r.id === requestId);
+            currentRequestId = requestId;
+            const modalBody = document.getElementById('modalBody');
+
+            async function renderDetails(req) {
+                const formattedTotal = formatCurrency((req.total_amount || 0), req.currency);
+                modalBody.innerHTML = `
+                <div class="detail-grid">
+                    <div class="detail-item">
+                        <span class="detail-label">رقم الطلب</span>
+                        <span class="detail-value">${req.order_number || req.id}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">مقدم الطلب</span>
+                        <span class="detail-value">${req.requester}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">القسم</span>
+                        <span class="detail-value">${req.department}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">تاريخ الطلب</span>
+                        <span class="detail-value">${req.date || '-'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">موعد التسليم</span>
+                        <span class="detail-value">${req.delivery_date || '-'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">عنوان التسليم</span>
+                        <span class="detail-value">${req.delivery_address || '-'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">رمز المشروع</span>
+                        <span class="detail-value">${req.project_code || '-'}</span>
+                    </div>
+                    <div class="detail-item">
+                        <span class="detail-label">العملة</span>
+                        <span class="detail-value">${req.currency || '-'}</span>
+                    </div>
+                </div>
+                <div class="items-list">
+                    <h4>قائمة المواد المطلوبة:</h4>
+                    <table class="items-table-modal">
+                        <thead>
+                            <tr>
+                                <th>اسم المادة</th>
+                                <th>المواصفات</th>
+                                <th>الوحدة</th>
+                                <th>العدد</th>
+                                <th>السعر</th>
+                                <th>المجموع</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${req.items ? req.items.map(item => `
+                                <tr>
+                                    <td>${item.item_name || '-'}</td>
+                                    <td>${item.specification || '-'}</td>
+                                    <td>${item.unit || '-'}</td>
+                                    <td>${item.quantity || 0}</td>
+                                    <td>${formatCurrency(item.price || 0, req.currency)}</td>
+                                    <td>${formatCurrency(item.total || 0, req.currency)}</td>
+                                </tr>
+                            `).join('') : '<tr><td colspan="6">لا توجد مواد</td></tr>'}
+                        </tbody>
+                        <tfoot>
+                            <tr style="font-weight: bold; background: #f8f9fa;">
+                                <td colspan="5">المجموع الكلي</td>
+                                <td>${formattedTotal}</td>
+                            </tr>
+                        </tfoot>
+                    </table>
+                </div>
+            `;
+                document.getElementById('requestModal').style.display = 'block';
+                // إخفاء أزرار الموافقة/الرفض إذا لم نكن في عرض الطابور (pending)
+                const actions = document.querySelector('#requestModal .modal-actions');
+                if (actions) {
+                    const status = (req.status || '').toLowerCase();
+                    if (currentView && currentView !== 'pending') {
+                        actions.style.display = 'none';
+                    } else if (status === 'approved' || status === 'rejected') {
+                        actions.style.display = 'none';
+                    } else {
+                        actions.style.display = 'flex';
+                    }
+                }
+            }
+
+            if (request) {
+                renderDetails(request);
+            } else {
+                try {
+                    const resp = await fetch(`${API_BASE}/requests/${requestId}`, { headers: { 'Authorization': `Bearer ${localStorage.getItem('token')}` }});
+                    if (resp.ok) {
+                        const detail = await resp.json();
+                        renderDetails(detail);
+                    }
+                } catch {}
+            }
+        }
+
+        function closeModal() {
+            document.getElementById('requestModal').style.display = 'none';
+            currentRequestId = null;
+        }
+
+        async function updateStatus(action) {
+            if (!currentRequestId) return;
+
+            try {
+                const response = await fetch(`${API_BASE}/requests/${currentRequestId}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({ action })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    alert(`تم ${action === 'approve' ? 'إصدار أمر الصرف ل' : 'رفض'} الطلب بنجاح`);
+                    closeModal();
+                    if (result && (result.total != null || result.approved != null || result.rejected != null)) {
+                        if (result.total != null) document.getElementById('totalRequests').textContent = result.total;
+                        if (result.approved != null) document.getElementById('approvedRequests').textContent = result.approved;
+                        if (result.rejected != null) document.getElementById('rejectedRequests').textContent = result.rejected;
+                    }
+                    await loadRequests(); // إعادة تحميل الطابور لتحديث الجدول والـ pending
+                } else {
+                    const error = await response.json();
+                    alert(`خطأ: ${error.error}`);
+                }
+            } catch (error) {
+                alert('خطأ في تحديث حالة الطلب');
+                console.error('Error updating status:', error);
+            }
+        }
+
+        async function quickUpdateStatus(requestId, action) {
+            try {
+                console.log(`🔄 تحديث حالة الطلب ${requestId} إلى ${action}...`);
+                const response = await fetch(`${API_BASE}/requests/${requestId}/status`, {
+                    method: 'PATCH',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    },
+                    body: JSON.stringify({ action })
+                });
+
+                if (response.ok) {
+                    const result = await response.json();
+                    console.log('✅ تم تحديث الطلب بنجاح:', result);
+                    alert(`تم ${action === 'approve' ? 'إصدار أمر الصرف ل' : 'رفض'} الطلب بنجاح`);
+                    if (result && (result.total != null || result.approved != null || result.rejected != null)) {
+                        if (result.total != null) document.getElementById('totalRequests').textContent = result.total;
+                        if (result.approved != null) document.getElementById('approvedRequests').textContent = result.approved;
+                        if (result.rejected != null) document.getElementById('rejectedRequests').textContent = result.rejected;
+                    }
+                    await loadRequests(); // إعادة تحميل الطابور لتحديث الجدول والـ pending
+                } else {
+                    const error = await response.json();
+                    console.error('❌ خطأ في تحديث الطلب:', error);
+                    alert(`خطأ: ${error.error}`);
+                }
+            } catch (error) {
+                console.error('❌ خطأ في تحديث حالة الطلب:', error);
+                alert('خطأ في تحديث حالة الطلب');
+            }
+        }
+
+        function logout() {
+            localStorage.removeItem('token');
+            localStorage.removeItem('user');
+            window.location.href = 'login.html';
+        }
+
+        // Close modal when clicking outside
+        window.onclick = function(event) {
+            const modal = document.getElementById('requestModal');
+            if (event.target === modal) {
+                closeModal();
+            }
+        }
+
+        // إدارة تقارير الصرف
+        let currentView = 'pending'; // 'pending' or 'reports'
+
+        function showPendingRequests() {
+            currentView = 'pending';
+            // تحديث القائمة الجانبية
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // إعادة تعيين المحتوى الأصلي
+            resetToOriginalContent();
+            
+            // تحديث العنوان
+            document.querySelector('.page-title').textContent = 'طلبات الشراء - أمر الصرف';
+            
+            // إظهار الفلاتر والجدول
+            document.querySelector('.filters-section').style.display = 'block';
+            document.querySelector('.requests-section').style.display = 'block';
+            
+            // إعادة تحميل الطلبات العادية
+            loadRequests();
+        }
+
+        function showDisbursementReports() {
+            currentView = 'reports';
+            // تحديث القائمة الجانبية
+            document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
+            event.target.classList.add('active');
+            
+            // تحديث العنوان
+            document.querySelector('.page-title').textContent = 'تقارير الصرف';
+            
+            // إخفاء الفلاتر والجدول
+            document.querySelector('.filters-section').style.display = 'none';
+            document.querySelector('.requests-section').style.display = 'none';
+            
+            // إظهار تقارير الصرف
+            showReportsContent();
+        }
+
+        function resetToOriginalContent() {
+            // إعادة تعيين المحتوى الأصلي
+            const mainContent = document.querySelector('.main-content');
+            const originalContent = mainContent.innerHTML;
+            
+            // حفظ المحتوى الأصلي إذا لم يتم حفظه بعد
+            if (!window.originalMainContent) {
+                window.originalMainContent = originalContent;
+            }
+            
+            // إعادة المحتوى الأصلي
+            if (window.originalMainContent) {
+                mainContent.innerHTML = window.originalMainContent;
+            }
+        }
+
+        function showReportsContent() {
+            const mainContent = document.querySelector('.main-content');
+            
+            // إنشاء محتوى التقارير
+            const reportsHTML = `
+                <div class="reports-container">
+                    <div class="reports-header">
+                        <h2>📊 تقارير الصرف</h2>
+                        <p>إحصائيات شاملة لطلبات الصرف المعتمدة</p>
+                    </div>
+                    
+                    <div class="reports-grid">
+                        <div class="report-card">
+                            <div class="report-icon">💰</div>
+                            <div class="report-content">
+                                <h3>إجمالي المبالغ المعتمدة</h3>
+                                <div class="report-value" id="totalApprovedAmount">$0.00</div>
+                                <div class="report-subtitle">هذا الشهر</div>
+                            </div>
+                        </div>
+                        
+                        <div class="report-card">
+                            <div class="report-icon">📋</div>
+                            <div class="report-content">
+                                <h3>عدد الطلبات المعتمدة</h3>
+                                <div class="report-value" id="totalApprovedCount">0</div>
+                                <div class="report-subtitle">هذا الشهر</div>
+                            </div>
+                        </div>
+                        
+                        <div class="report-card">
+                            <div class="report-icon">🏢</div>
+                            <div class="report-content">
+                                <h3>الأقسام الأكثر طلباً</h3>
+                                <div class="report-value" id="topDepartment">-</div>
+                                <div class="report-subtitle">أعلى قسم</div>
+                            </div>
+                        </div>
+                        
+                        <div class="report-card">
+                            <div class="report-icon">📈</div>
+                            <div class="report-content">
+                                <h3>متوسط قيمة الطلب</h3>
+                                <div class="report-value" id="averageAmount">$0.00</div>
+                                <div class="report-subtitle">متوسط الطلب</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="reports-charts">
+                        <div class="chart-container">
+                            <h3>📊 توزيع الطلبات حسب القسم</h3>
+                            <div id="departmentChart" class="chart-placeholder">
+                                <div class="chart-bars">
+                                    <div class="chart-bar" style="height: 60%; background: #3498db;">
+                                        <span class="bar-label">مالية</span>
+                                        <span class="bar-value">5 طلبات</span>
+                                    </div>
+                                    <div class="chart-bar" style="height: 40%; background: #e74c3c;">
+                                        <span class="bar-label">موارد بشرية</span>
+                                        <span class="bar-value">3 طلبات</span>
+                                    </div>
+                                    <div class="chart-bar" style="height: 80%; background: #2ecc71;">
+                                        <span class="bar-label">تنفيذية</span>
+                                        <span class="bar-value">8 طلبات</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="chart-container">
+                            <h3>📅 الطلبات المعتمدة هذا الشهر</h3>
+                            <div id="monthlyChart" class="chart-placeholder">
+                                <div class="monthly-stats" id="monthlyStats">
+                                    <div class="no-data">جاري تحميل البيانات...</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            `;
+            
+            // إضافة CSS للتقارير
+            const reportsCSS = `
+                <style>
+                .reports-container {
+                    padding: 20px;
+                    max-width: 1200px;
+                    margin: 0 auto;
+                }
+                
+                .reports-header {
+                    text-align: center;
+                    margin-bottom: 30px;
+                    padding: 20px;
+                    background: white;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                }
+                
+                .reports-header h2 {
+                    color: #2c3e50;
+                    margin-bottom: 10px;
+                }
+                
+                .reports-grid {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+                    gap: 20px;
+                    margin-bottom: 30px;
+                }
+                
+                .report-card {
+                    background: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                    display: flex;
+                    align-items: center;
+                    gap: 15px;
+                }
+                
+                .report-icon {
+                    font-size: 2.5em;
+                    opacity: 0.8;
+                }
+                
+                .report-content h3 {
+                    color: #2c3e50;
+                    margin-bottom: 10px;
+                    font-size: 14px;
+                }
+                
+                .report-value {
+                    font-size: 24px;
+                    font-weight: bold;
+                    color: #3498db;
+                    margin-bottom: 5px;
+                }
+                
+                .report-subtitle {
+                    color: #7f8c8d;
+                    font-size: 12px;
+                }
+                
+                .reports-charts {
+                    display: grid;
+                    grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+                    gap: 20px;
+                }
+                
+                .chart-container {
+                    background: white;
+                    padding: 20px;
+                    border-radius: 10px;
+                    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+                }
+                
+                .chart-container h3 {
+                    color: #2c3e50;
+                    margin-bottom: 20px;
+                    text-align: center;
+                }
+                
+                .chart-bars {
+                    display: flex;
+                    align-items: end;
+                    gap: 10px;
+                    height: 200px;
+                    padding: 20px 0;
+                }
+                
+                .chart-bar {
+                    flex: 1;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: end;
+                    align-items: center;
+                    border-radius: 5px 5px 0 0;
+                    position: relative;
+                    min-height: 20px;
+                }
+                
+                .bar-label {
+                    position: absolute;
+                    bottom: -25px;
+                    font-size: 12px;
+                    color: #2c3e50;
+                    font-weight: bold;
+                }
+                
+                .bar-value {
+                    position: absolute;
+                    top: -25px;
+                    font-size: 11px;
+                    color: #7f8c8d;
+                }
+                
+                .monthly-stats {
+                    display: flex;
+                    flex-direction: column;
+                    gap: 15px;
+                }
+                
+                .month-stat {
+                    display: flex;
+                    justify-content: space-between;
+                    align-items: center;
+                    padding: 10px;
+                    background: #f8f9fa;
+                    border-radius: 5px;
+                }
+                
+                .month-name {
+                    font-weight: bold;
+                    color: #2c3e50;
+                }
+                
+                .month-count {
+                    color: #3498db;
+                    font-weight: bold;
+                }
+                
+                .no-data {
+                    text-align: center;
+                    color: #7f8c8d;
+                    font-style: italic;
+                    padding: 20px;
+                }
+                
+                @media (max-width: 768px) {
+                    .reports-grid {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .reports-charts {
+                        grid-template-columns: 1fr;
+                    }
+                    
+                    .chart-bars {
+                        flex-direction: column;
+                        height: auto;
+                    }
+                    
+                    .chart-bar {
+                        height: 40px !important;
+                        margin-bottom: 20px;
+                    }
+                }
+                </style>
+            `;
+            
+            // إضافة المحتوى
+            mainContent.innerHTML = reportsHTML + reportsCSS;
+            
+            // تحميل البيانات
+            loadReportsData();
+        }
+
+        async function loadReportsData() {
+            try {
+                // جلب الطلبات المعتمدة
+                const response = await fetch(`${API_BASE}/my/approved`, {
+                    headers: {
+                        'Authorization': `Bearer ${localStorage.getItem('token')}`
+                    }
+                });
+
+                if (response.ok) {
+                    const approvedRequests = await response.json();
+                    calculateReports(approvedRequests);
+                } else if (response.status === 401) {
+                    logout();
+                } else {
+                    console.error('Failed to load reports data');
+                }
+            } catch (error) {
+                console.error('Error loading reports data:', error);
+            }
+        }
+
+        function calculateReports(requests) {
+            // حساب الإحصائيات
+            const totalAmount = requests.reduce((sum, req) => sum + (req.total_amount || 0), 0);
+            const totalCount = requests.length;
+            const averageAmount = totalCount > 0 ? totalAmount / totalCount : 0;
+            
+            // حساب الأقسام الأكثر طلباً
+            const departmentCounts = {};
+            requests.forEach(req => {
+                departmentCounts[req.department] = (departmentCounts[req.department] || 0) + 1;
+            });
+            const topDepartment = Object.keys(departmentCounts).reduce((a, b) => 
+                departmentCounts[a] > departmentCounts[b] ? a : b, 'لا توجد بيانات'
+            );
+            
+            // تحديث القيم
+            document.getElementById('totalApprovedAmount').textContent = `$${totalAmount.toFixed(2)}`;
+            document.getElementById('totalApprovedCount').textContent = totalCount;
+            document.getElementById('topDepartment').textContent = topDepartment;
+            document.getElementById('averageAmount').textContent = `$${averageAmount.toFixed(2)}`;
+            
+            // تحديث الرسوم البيانية
+            updateCharts(departmentCounts, requests);
+            
+            // تحديث الإحصائيات الشهرية
+            updateMonthlyStats(requests);
+        }
+
+        function updateCharts(departmentCounts, requests) {
+            // تحديث رسم الأقسام
+            const chartBars = document.querySelector('.chart-bars');
+            if (chartBars) {
+                chartBars.innerHTML = Object.entries(departmentCounts).map(([dept, count]) => {
+                    const percentage = (count / requests.length) * 100;
+                    const colors = ['#3498db', '#e74c3c', '#2ecc71', '#f39c12', '#9b59b6'];
+                    const color = colors[Object.keys(departmentCounts).indexOf(dept) % colors.length];
+                    
+                    return `
+                        <div class="chart-bar" style="height: ${percentage}%; background: ${color};">
+                            <span class="bar-label">${dept}</span>
+                            <span class="bar-value">${count} طلبات</span>
+                        </div>
+                    `;
+                }).join('');
+            }
+        }
+
+        function updateMonthlyStats(requests) {
+            const monthlyStats = document.getElementById('monthlyStats');
+            if (!monthlyStats) return;
+
+            if (requests.length === 0) {
+                monthlyStats.innerHTML = '<div class="no-data">لا توجد طلبات معتمدة هذا الشهر</div>';
+                return;
+            }
+
+            // حساب الطلبات حسب الأسبوع
+            const now = new Date();
+            const currentMonth = now.getMonth();
+            const currentYear = now.getFullYear();
+            
+            // إنشاء أسابيع الشهر الحالي
+            const weeks = [];
+            const firstDay = new Date(currentYear, currentMonth, 1);
+            const lastDay = new Date(currentYear, currentMonth + 1, 0);
+            
+            let weekStart = new Date(firstDay);
+            let weekNumber = 1;
+            
+            while (weekStart <= lastDay) {
+                const weekEnd = new Date(weekStart);
+                weekEnd.setDate(weekStart.getDate() + 6);
+                if (weekEnd > lastDay) weekEnd.setTime(lastDay.getTime());
+                
+                weeks.push({
+                    number: weekNumber,
+                    start: new Date(weekStart),
+                    end: new Date(weekEnd),
+                    count: 0
+                });
+                
+                weekStart.setDate(weekStart.getDate() + 7);
+                weekNumber++;
+            }
+            
+            // حساب عدد الطلبات لكل أسبوع
+            requests.forEach(request => {
+                if (request.approved_at) {
+                    const approvedDate = new Date(request.approved_at);
+                    if (approvedDate.getMonth() === currentMonth && approvedDate.getFullYear() === currentYear) {
+                        weeks.forEach(week => {
+                            if (approvedDate >= week.start && approvedDate <= week.end) {
+                                week.count++;
+                            }
+                        });
+                    }
+                }
+            });
+            
+            // إنشاء HTML للإحصائيات
+            const statsHTML = weeks.map(week => `
+                <div class="month-stat">
+                    <span class="month-name">الأسبوع ${week.number}</span>
+                    <span class="month-count">${week.count} طلبات</span>
+                </div>
+            `).join('');
+            
+            monthlyStats.innerHTML = statsHTML;
+        }
+
+        // حفظ المحتوى الأصلي عند تحميل الصفحة
+        document.addEventListener('DOMContentLoaded', function() {
+            const mainContent = document.querySelector('.main-content');
+            if (mainContent && !window.originalMainContent) {
+                window.originalMainContent = mainContent.innerHTML;
+            }
+        });
+
+        // Add event listeners for real-time search
+        document.getElementById('searchInput').addEventListener('input', applyFilters);
+        document.getElementById('statusFilter').addEventListener('change', applyFilters);
+        document.getElementById('departmentFilter').addEventListener('change', applyFilters);
+        document.getElementById('dateFromFilter').addEventListener('change', applyFilters);
+        document.getElementById('dateToFilter').addEventListener('change', applyFilters);
+    </script>
+</body>
+</html>

@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>لوحة قسم المشتريات - طلبات الشراء</title>
+    <link rel="stylesheet" href="./css/fonts.css">
+    <link rel="stylesheet" href="./css/style.css" />
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        html, body {
+            margin: 0;
+            padding: 0;
+            min-height: 100vh;
+            background: linear-gradient(135deg, #698163 0%, #5a6f56 100%);
+            font-family: 'Tajawal', Arial, sans-serif;
+        }
+        body {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+        }
+        .layout {
+            display: flex;
+            width: 100%;
+            max-width: 1350px;
+            min-height: calc(100vh - 40px);
+            margin: 20px;
+            background: rgba(255, 255, 255, 0.97);
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+        .sidebar {
+            width: 260px;
+            background: linear-gradient(180deg, #34495e 0%, #2c3e50 100%);
+            color: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+        .sidebar-header {
+            padding: 30px 20px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            text-align: center;
+        }
+        .sidebar-header h2 {
+            margin: 0;
+            font-size: 22px;
+            font-family: 'Amiri', serif;
+        }
+        .sidebar-header p {
+            margin: 8px 0 0;
+            opacity: 0.75;
+            font-size: 14px;
+        }
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+        .menu-item {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            padding: 14px 26px;
+            color: #fff;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+        .menu-item:hover,
+        .menu-item.active {
+            background: rgba(255,255,255,0.12);
+        }
+        .menu-item i {
+            width: 18px;
+            text-align: center;
+        }
+        .main {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: transparent;
+        }
+        .top-bar {
+            background: transparent;
+            padding: 24px 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .page-title {
+            font-size: 24px;
+            font-weight: 700;
+            color: #2c3e50;
+        }
+        .top-actions {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .notif-btn,
+        .logout-btn,
+        .refresh-btn {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 8px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .refresh-btn {
+            background: #2980b9;
+            color: #fff;
+        }
+        .notif-btn {
+            background: #27ae60;
+            color: #fff;
+            position: relative;
+        }
+        .notif-count {
+            position: absolute;
+            top: -6px;
+            left: -6px;
+            background: #e74c3c;
+            color: white;
+            font-size: 11px;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .logout-btn {
+            background: #e74c3c;
+            color: #fff;
+        }
+        .notif-btn:hover,
+        .logout-btn:hover,
+        .refresh-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 12px rgba(0,0,0,0.15);
+        }
+        .content {
+            padding: 0 32px 40px;
+        }
+        .cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 18px;
+        }
+        .card {
+            background: #fff;
+            border-radius: 14px;
+            padding: 20px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+        .card-icon {
+            width: 48px;
+            height: 48px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #fff;
+            font-size: 22px;
+        }
+        .card-icon.pending { background: #f39c12; }
+        .card-icon.in-progress { background: #2980b9; }
+        .card-icon.completed { background: #27ae60; }
+        .card-icon.adjusted { background: #8e44ad; }
+        .card-content h3 {
+            margin: 0;
+            font-size: 28px;
+            color: #2c3e50;
+        }
+        .card-content p {
+            margin: 4px 0 0;
+            color: #7f8c8d;
+        }
+        .table-wrapper {
+            margin-top: 24px;
+            background: #fff;
+            border-radius: 14px;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            overflow: hidden;
+        }
+        .table-header {
+            padding: 20px 24px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .filters {
+            display: flex;
+            gap: 12px;
+            align-items: center;
+        }
+        .filters select,
+        .filters input {
+            padding: 10px 14px;
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        thead {
+            background: #f0f2f5;
+        }
+        th, td {
+            padding: 14px 12px;
+            text-align: center;
+            border-bottom: 1px solid #edf0f2;
+            font-size: 14px;
+        }
+        tbody tr:hover {
+            background: #f8f9fb;
+        }
+        .status-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .status-pending { background: rgba(241, 196, 15, 0.18); color: #b9770e; }
+        .status-adjusted { background: rgba(142, 68, 173, 0.18); color: #8e44ad; }
+        .status-purchased { background: rgba(39, 174, 96, 0.18); color: #1e8449; }
+        .status-cancelled { background: rgba(231, 76, 60, 0.18); color: #c0392b; }
+        .action-btn {
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 13px;
+            font-weight: 600;
+            transition: background 0.2s ease;
+            margin: 0 4px;
+        }
+        .btn-view { background: #2980b9; color: #fff; }
+        .btn-complete { background: #27ae60; color: #fff; }
+        .btn-view:hover { background: #1f6391; }
+        .btn-complete:hover { background: #1d7043; }
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .modal.active { display: flex; }
+        .modal-card {
+            background: #fff;
+            max-width: 920px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            border-radius: 16px;
+            box-shadow: 0 18px 40px rgba(0,0,0,0.15);
+            display: flex;
+            flex-direction: column;
+        }
+        .modal-header {
+            padding: 20px 26px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f9fafc;
+        }
+        .modal-body { padding: 24px 26px; }
+        .modal-footer {
+            padding: 18px 26px;
+            border-top: 1px solid #ecf0f1;
+            display: flex;
+            gap: 12px;
+            justify-content: flex-end;
+        }
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 22px;
+            cursor: pointer;
+            color: #7f8c8d;
+        }
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 14px;
+            margin-bottom: 24px;
+        }
+        .detail-box {
+            background: #f7f9fb;
+            border-radius: 10px;
+            padding: 12px 14px;
+        }
+        .detail-label { color: #7f8c8d; font-size: 12px; margin-bottom: 4px; }
+        .detail-value { color: #2c3e50; font-weight: 600; }
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 20px;
+        }
+        .items-table thead tr { background: #f0f2f5; }
+        .items-table th, .items-table td {
+            padding: 10px;
+            border: 1px solid #edf0f2;
+            font-size: 13px;
+        }
+        .items-table input {
+            width: 100%;
+            border: 1px solid #dcdde1;
+            border-radius: 6px;
+            padding: 6px;
+            font-family: inherit;
+            text-align: center;
+        }
+        .note-section {
+            margin-top: 16px;
+        }
+        .note-section textarea {
+            width: 100%;
+            min-height: 80px;
+            padding: 10px;
+            border: 1px solid #dcdde1;
+            border-radius: 8px;
+            font-family: inherit;
+        }
+        .primary-btn {
+            background: #2980b9;
+            color: #fff;
+        }
+        .secondary-btn {
+            background: #8e44ad;
+            color: #fff;
+        }
+        .danger-btn {
+            background: #c0392b;
+            color: #fff;
+        }
+        .primary-btn:hover { background: #1f6391; }
+        .secondary-btn:hover { background: #6d3586; }
+        .danger-btn:hover { background: #962d22; }
+        .notifications-panel {
+            position: fixed;
+            top: 80px;
+            left: 40px;
+            width: 320px;
+            max-height: 420px;
+            overflow-y: auto;
+            background: #fff;
+            border-radius: 12px;
+            box-shadow: 0 12px 30px rgba(0,0,0,0.18);
+            display: none;
+            flex-direction: column;
+            z-index: 1100;
+        }
+        .notifications-panel.active { display: flex; }
+        .notifications-header {
+            padding: 14px 18px;
+            border-bottom: 1px solid #ecf0f1;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .notifications-list { list-style: none; margin: 0; padding: 0; }
+        .notifications-list li {
+            padding: 12px 18px;
+            border-bottom: 1px solid #f2f4f6;
+        }
+        .notifications-list li.unread {
+            background: #f9fbfd;
+        }
+        .notifications-list small {
+            color: #7f8c8d;
+            display: block;
+            margin-top: 6px;
+        }
+        @media (max-width: 960px) {
+            body { align-items: flex-start; }
+            .layout { flex-direction: column; margin: 12px; }
+            .sidebar { width: 100%; flex-direction: row; overflow-x: auto; }
+            .sidebar-menu { display: flex; }
+            .content { padding: 0 18px 30px; }
+            .table-wrapper { margin-top: 18px; }
+            .table-header { flex-direction: column; gap: 12px; align-items: flex-start; }
+        }
+    </style>
+</head>
+<body>
+    <div class="layout">
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>صرح القابضة</h2>
+                <p>لوحة قسم المشتريات</p>
+            </div>
+            <nav class="sidebar-menu">
+                <a href="#" class="menu-item active" id="menuPending"><i class="fas fa-shopping-basket"></i>طلبات قيد المعالجة</a>
+                <a href="#" class="menu-item" id="menuCompleted"><i class="fas fa-check-circle"></i>طلبات مكتملة</a>
+            </nav>
+        </aside>
+
+        <main class="main">
+            <div class="top-bar">
+                <div class="page-title">قسم المشتريات</div>
+                <div class="top-actions">
+                    <button class="refresh-btn" id="btnRefresh"><i class="fas fa-rotate"></i> تحديث</button>
+                    <button class="notif-btn" id="btnNotifications"><i class="fas fa-bell"></i>
+                        <span class="notif-count" id="notifCount" style="display:none;">0</span>
+                    </button>
+                    <button class="logout-btn" id="btnLogout"><i class="fas fa-sign-out-alt"></i> خروج</button>
+                </div>
+            </div>
+
+            <div class="content">
+                <div class="cards">
+                    <div class="card">
+                        <div class="card-icon pending"><i class="fas fa-clipboard-list"></i></div>
+                        <div class="card-content">
+                            <h3 id="statPending">0</h3>
+                            <p>طلبات بانتظار المعالجة</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon in-progress"><i class="fas fa-tasks"></i></div>
+                        <div class="card-content">
+                            <h3 id="statAdjusted">0</h3>
+                            <p>طلبات تم تعديلها</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon completed"><i class="fas fa-check-double"></i></div>
+                        <div class="card-content">
+                            <h3 id="statCompleted">0</h3>
+                            <p>طلبات مكتملة</p>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-icon adjusted"><i class="fas fa-exchange-alt"></i></div>
+                        <div class="card-content">
+                            <h3 id="statCancelled">0</h3>
+                            <p>طلبات ملغاة</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="table-wrapper">
+                    <div class="table-header">
+                        <h3>قائمة الطلبات</h3>
+                        <div class="filters">
+                            <select id="statusFilter">
+                                <option value="">جميع الحالات</option>
+                                <option value="pending">قيد المعالجة</option>
+                                <option value="adjusted">تم تعديلها</option>
+                                <option value="purchased">تم الشراء</option>
+                                <option value="cancelled">ملغى</option>
+                                <option value="completed">مكتمل</option>
+                            </select>
+                            <input type="text" id="searchInput" placeholder="بحث برقم الطلب أو مقدم الطلب">
+                        </div>
+                    </div>
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>رقم الطلب</th>
+                                <th>مقدم الطلب</th>
+                                <th>القسم</th>
+                                <th>المجموع</th>
+                                <th>حالة المشتريات</th>
+                                <th>الإجراءات</th>
+                            </tr>
+                        </thead>
+                        <tbody id="requestsTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <div class="modal" id="requestModal">
+        <div class="modal-card">
+            <div class="modal-header">
+                <h3 id="modalTitle">تفاصيل الطلب</h3>
+                <button class="close-btn" id="modalCloseBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="detail-grid" id="detailGrid"></div>
+                <table class="items-table" id="itemsTable">
+                    <thead>
+                        <tr>
+                            <th>#</th>
+                            <th>اسم المادة</th>
+                            <th>المواصفات</th>
+                            <th>الوحدة</th>
+                            <th>الكمية</th>
+                            <th>السعر</th>
+                            <th>المجموع</th>
+                        </tr>
+                    </thead>
+                    <tbody></tbody>
+                </table>
+                <div class="note-section">
+                    <label for="procurementNote">ملاحظة المشتريات (إلزامية عند التعديل أو الإنهاء)</label>
+                    <textarea id="procurementNote" placeholder="اكتب تفاصيل التعديل أو سبب الإنهاء..."></textarea>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="secondary-btn" id="btnSaveChanges"><i class="fas fa-save"></i> حفظ التعديلات</button>
+                <button class="primary-btn" id="btnMarkPurchased"><i class="fas fa-check"></i> تم الشراء</button>
+                <button class="danger-btn" id="btnCancelRequest"><i class="fas fa-times"></i> إلغاء الطلب</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="notifications-panel" id="notificationsPanel">
+        <div class="notifications-header">
+            <span>الإشعارات</span>
+            <button class="refresh-btn" id="btnMarkAllRead" style="padding:6px 10px; font-size:12px;"><i class="fas fa-check"></i> تعليم كمقروء</button>
+        </div>
+        <ul class="notifications-list" id="notificationsList"></ul>
+    </div>
+
+    <script src="./js/procurement.js"></script>
+</body>
+</html>
