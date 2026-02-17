@@ -1,7 +1,7 @@
-from sqlalchemy import Column, Integer, String, Float, Date, ForeignKey, DateTime, Boolean, Text
+from sqlalchemy import Column, Index, Integer, String, Float, Date, ForeignKey, DateTime, Boolean, Text
 from sqlalchemy.orm import relationship, Mapped, mapped_column
 from typing import Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from .database import Base
 
 # حالات سير العمل المؤتمت
@@ -25,7 +25,8 @@ class User(Base):
     role: Mapped[str] = mapped_column(String(50))  # admin, manager, finance, disbursement, requester
     department: Mapped[str] = mapped_column(String(255))
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.utcnow)
+    signature: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # التوقيع الإلكتروني (base64 image)
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
 class PurchaseRequest(Base):
     __tablename__ = "purchase_requests"
@@ -49,18 +50,21 @@ class PurchaseRequest(Base):
     procurement_updated_at: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)
     rejection_note: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     created_by: Mapped[str] = mapped_column(String(120), nullable=True)  # اربطه بمستخدم المنشئ
-    created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.utcnow)
-    updated_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.utcnow, onupdate=datetime.utcnow)
-
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
+    updated_at: Mapped[DateTime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc), onupdate=lambda: datetime.now(timezone.utc))
+    
     # بيانات جدول الموافقات
     requester_name: Mapped[str] = mapped_column(String(255), nullable=True)
     requester_position: Mapped[str] = mapped_column(String(255), nullable=True)
     manager_name: Mapped[str] = mapped_column(String(255), nullable=True)
     manager_position: Mapped[str] = mapped_column(String(255), nullable=True)
+    manager_signature: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # توقيع المدير المباشر
     finance_name: Mapped[str] = mapped_column(String(255), nullable=True)
     finance_position: Mapped[str] = mapped_column(String(255), nullable=True)
+    finance_signature: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # توقيع المدير المالي
     disbursement_name: Mapped[str] = mapped_column(String(255), nullable=True)
     disbursement_position: Mapped[str] = mapped_column(String(255), nullable=True)
+    disbursement_signature: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # توقيع أمر الصرف
     requester_date: Mapped[str] = mapped_column(String(50), nullable=True)
     manager_date: Mapped[str] = mapped_column(String(50), nullable=True)
     finance_date: Mapped[str] = mapped_column(String(50), nullable=True)
@@ -69,6 +73,11 @@ class PurchaseRequest(Base):
     items: Mapped[list["PurchaseItem"]] = relationship(back_populates="request", cascade="all, delete-orphan")
     history: Mapped[list["ApprovalHistory"]] = relationship("ApprovalHistory", back_populates="request", cascade="all, delete-orphan")
     notifications: Mapped[list["Notification"]] = relationship("Notification", back_populates="request", cascade="all, delete-orphan")
+
+    __table_args__ = (
+        Index("ix_pr_status_department", "status", "department"),
+        Index("ix_pr_created_by", "created_by"),
+    )
 
 class PurchaseItem(Base):
     __tablename__ = "purchase_items"
@@ -81,6 +90,12 @@ class PurchaseItem(Base):
     quantity: Mapped[float] = mapped_column(Float, default=0.0)
     price: Mapped[float] = mapped_column(Float, default=0.0)
     total: Mapped[float] = mapped_column(Float, default=0.0)
+    
+    # حقول الموافقة على مستوى البند
+    status: Mapped[str] = mapped_column(String(20), default="pending")  # pending, approved, rejected
+    rejection_reason: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # سبب الرفض
+    rejected_by: Mapped[Optional[str]] = mapped_column(String(100), nullable=True)  # من رفض البند
+    rejection_date: Mapped[Optional[DateTime]] = mapped_column(DateTime, nullable=True)  # تاريخ الرفض
 
     request: Mapped["PurchaseRequest"] = relationship(back_populates="items")
 
@@ -93,7 +108,7 @@ class AccountType(Base):
     description: Mapped[str] = mapped_column(String(500), nullable=True)
     parent_id: Mapped[Optional[int]] = mapped_column(Integer, ForeignKey("account_types.id"), nullable=True, index=True)  # حساب الأب
     is_active: Mapped[bool] = mapped_column(Boolean, default=True)
-    created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
     
     # العلاقة مع الحساب الأب
     parent: Mapped[Optional["AccountType"]] = relationship("AccountType", remote_side=[id], foreign_keys=[parent_id], back_populates="children")
@@ -108,9 +123,14 @@ class ApprovalHistory(Base):
     actor_user: Mapped[str] = mapped_column(String(120), nullable=True)  # اسم المستخدم/الإيميل
     action: Mapped[str] = mapped_column(String(16), nullable=False)  # approve / reject / create
     note: Mapped[str] = mapped_column(Text, nullable=True)
-    created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.utcnow)
+    signature: Mapped[Optional[str]] = mapped_column(Text, nullable=True)  # التوقيع الإلكتروني (base64 image)
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     request: Mapped["PurchaseRequest"] = relationship("PurchaseRequest", back_populates="history")
+
+    __table_args__ = (
+        Index("ix_ah_actor_action", "actor_user", "action"),
+    )
 
 class Notification(Base):
     __tablename__ = "notifications"
@@ -125,6 +145,10 @@ class Notification(Base):
     actor_role: Mapped[Optional[str]] = mapped_column(String(50), nullable=True)
     note: Mapped[Optional[str]] = mapped_column(Text, nullable=True)
     is_read: Mapped[bool] = mapped_column(Boolean, default=False)
-    created_at: Mapped[DateTime] = mapped_column(DateTime, default=datetime.utcnow)
+    created_at: Mapped[DateTime] = mapped_column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     request: Mapped[Optional["PurchaseRequest"]] = relationship("PurchaseRequest", back_populates="notifications")
+
+    __table_args__ = (
+        Index("ix_notif_recipient_read", "recipient_username", "is_read"),
+    )

@@ -1,11 +1,14 @@
+"""
+إعداد قاعدة البيانات — SQLAlchemy Engine & Session
+"""
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, declarative_base
+from .config import DATABASE_URL
 
-# استخدم SQLite كبداية، ويمكن استبداله بقاعدة أخرى (PostgreSQL/MySQL) بسهولة
-DATABASE_URL = "sqlite:///./database/purchase_requests.db"
+# لـ SQLite فقط: السماح بالاستخدام من threads مختلفة
+connect_args = {"check_same_thread": False} if DATABASE_URL.startswith("sqlite") else {}
 
-# ل SQLite فقط: نحتاج هذا الخيار لتجاوز قيود الـ thread
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-
+engine = create_engine(DATABASE_URL, connect_args=connect_args)
 SessionLocal = sessionmaker(bind=engine, autocommit=False, autoflush=False)
 Base = declarative_base()

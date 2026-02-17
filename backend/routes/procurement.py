@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from flask import Blueprint, jsonify, request
 from sqlalchemy.orm import joinedload
 
@@ -82,11 +82,10 @@ def update_procurement_request(req_id):
 
     db = SessionLocal()
     try:
-        pr = (
-            db.query(PurchaseRequest)
-            .options(joinedload(PurchaseRequest.items))
-            .get(req_id)
-        )
+        pr = db.get(PurchaseRequest, req_id)
+        if pr:
+            # تحميل العناصر يدوياً لأن db.get لا يدعم options
+            _ = pr.items
         if not pr:
             return jsonify({"error": "الطلب غير موجود"}), 404
         if pr.status not in ("pending_procurement", "completed"):
@@ -135,7 +134,7 @@ def update_procurement_request(req_id):
             pr.procurement_assigned_to = assigned_to
             changes.append("تعيين المسؤول عن الطلب")
 
-        now = datetime.utcnow()
+        now = datetime.now(timezone.utc)
         pr.procurement_updated_at = now
 
         if mark_completed or new_status == "purchased":

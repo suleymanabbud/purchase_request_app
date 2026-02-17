@@ -1,6 +1,6 @@
 const API_BASE = `${window.location.origin}/api`;
 // ================== تحقق من تسجيل الدخول ==================
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   const token = localStorage.getItem('token');
   const userStr = localStorage.getItem('user');
   if (!token || !userStr) {
@@ -10,13 +10,10 @@ document.addEventListener('DOMContentLoaded', function() {
   }
   // حفظ بيانات المستخدم في متغيرات عامة
   window.currentUser = JSON.parse(userStr);
-  initNotifications();
   // مثال: window.currentUser.role, window.currentUser.department
-  // تعبئة حقل القسم تلقائيًا للطالب
+  // تعبئة حقل القسم تلقائيًا للطالب (حقل مقدم الطلب يبقى فارغاً ليملأه الموظف)
   if (window.currentUser.role === 'requester') {
-    const requesterEl = document.getElementById('requester');
     const departmentEl = document.getElementById('department');
-    if (requesterEl) requesterEl.value = window.currentUser.full_name || window.currentUser.username;
     if (departmentEl) {
       departmentEl.innerHTML = '';
       const opt = document.createElement('option');
@@ -27,7 +24,73 @@ document.addEventListener('DOMContentLoaded', function() {
       departmentEl.setAttribute('readonly', 'readonly');
     }
   }
+
+  // ملء أسماء المدراء في جدول الموافقات
+  fillApprovalManagerNames();
 });
+
+// ================== ملء أسماء المدراء في جدول الموافقات ==================
+async function fillApprovalManagerNames() {
+  try {
+    const token = localStorage.getItem('token');
+    const response = await fetch(`${API_BASE}/approval-managers`, {
+      headers: { 'Authorization': `Bearer ${token}` }
+    });
+
+    if (!response.ok) {
+      console.warn('تعذر جلب أسماء المدراء');
+      return;
+    }
+
+    const managers = await response.json();
+
+    // حقول جدول الموافقات (الاسم والمنصب)
+    const approvalInputs = document.querySelectorAll('.approval-input');
+
+    // ملء اسم الطالب في حقل الطالب
+    if (window.currentUser && approvalInputs[0]) {
+      approvalInputs[0].value = window.currentUser.full_name || window.currentUser.username;
+    }
+
+    // ملء منصب الطالب
+    if (approvalInputs[4]) {
+      approvalInputs[4].value = 'موظف ' + (window.currentUser?.department || '');
+    }
+
+    // ملء اسم المدير المباشر
+    if (managers.direct_manager && approvalInputs[1]) {
+      approvalInputs[1].value = managers.direct_manager;
+    }
+
+    // ملء منصب المدير المباشر
+    if (managers.direct_manager_position && approvalInputs[5]) {
+      approvalInputs[5].value = managers.direct_manager_position;
+    }
+
+    // ملء اسم المدير المالي
+    if (managers.finance_manager && approvalInputs[2]) {
+      approvalInputs[2].value = managers.finance_manager;
+    }
+
+    // ملء منصب المدير المالي
+    if (managers.finance_manager_position && approvalInputs[6]) {
+      approvalInputs[6].value = managers.finance_manager_position;
+    }
+
+    // ملء اسم آمر الصرف
+    if (managers.disbursement_manager && approvalInputs[3]) {
+      approvalInputs[3].value = managers.disbursement_manager;
+    }
+
+    // ملء منصب آمر الصرف
+    if (managers.disbursement_manager_position && approvalInputs[7]) {
+      approvalInputs[7].value = managers.disbursement_manager_position;
+    }
+
+  } catch (error) {
+    console.warn('خطأ في جلب أسماء المدراء:', error);
+  }
+}
 
 // ================== الإشعارات ==================
 let requesterNotifications = [];
@@ -129,7 +192,7 @@ async function markAllRequesterNotificationsRead() {
 }
 
 // ================== تهيئة التواريخ ==================
-document.getElementById('orderDate').value    = new Date().toISOString().split('T')[0];
+document.getElementById('orderDate').value = new Date().toISOString().split('T')[0];
 document.getElementById('deliveryDate').value = new Date().toISOString().split('T')[0];
 
 // ================== توليد رقم الطلب (الجزء الرقمي فقط) ==================
@@ -155,10 +218,28 @@ function ensurePRPrefix(val = "") {
 const orderNumberInput = document.getElementById('orderNumber');
 if (!orderNumberInput.value.trim() || orderNumberInput.value.trim() === 'PR-') {
   // إن كان الحقل فارغًا أو فقط PR-: نولّد قيمة افتراضية بصيغة PR-YYYYMMDD-HHMM
-  
+  orderNumberInput.value = 'PR-' + generateOrderNumberSuffix();
 } else {
   // إن كانت فيه قيمة: نضمن وجود البادئة PR-
   orderNumberInput.value = ensurePRPrefix(orderNumberInput.value);
+}
+// جعل الحقل للقراءة فقط — لا يحتاج التعديل اليدوي
+orderNumberInput.readOnly = true;
+orderNumberInput.style.backgroundColor = '#f0f0f0';
+orderNumberInput.style.cursor = 'not-allowed';
+
+// توليد رمز المشروع تلقائياً
+const projectCodeInput = document.getElementById('projectCode');
+if (projectCodeInput && (!projectCodeInput.value.trim())) {
+  const now = new Date();
+  const y = now.getFullYear();
+  const m = String(now.getMonth() + 1).padStart(2, '0');
+  const d = String(now.getDate()).padStart(2, '0');
+  const rand = String(Math.floor(Math.random() * 1000)).padStart(3, '0');
+  projectCodeInput.value = `PRJ-${y}${m}${d}-${rand}`;
+  projectCodeInput.readOnly = true;
+  projectCodeInput.style.backgroundColor = '#f0f0f0';
+  projectCodeInput.style.cursor = 'not-allowed';
 }
 
 // منع حذف البادئة "PR-"
@@ -200,10 +281,10 @@ function addNewRow() {
     <td class="row-total">0.00</td>
   `;
   tbody.appendChild(tr);
-  
+
   // إعادة تعيين حالة الحفظ عند إضافة صف جديد
   resetSaveStatus();
-  
+
   // إضافة مستمعات الأحداث للصف الجديد
   const newInputs = tr.querySelectorAll('input, textarea');
   newInputs.forEach(input => {
@@ -217,9 +298,9 @@ function calculateGrandTotal() {
   const rows = tbody.querySelectorAll('tr');
   let grand = 0;
   rows.forEach(row => {
-    const qtyEl   = row.cells[4].querySelector('input');
+    const qtyEl = row.cells[4].querySelector('input');
     const priceEl = row.cells[5].querySelector('input');
-    const qty   = parseFloat(qtyEl && qtyEl.value || 0) || 0;
+    const qty = parseFloat(qtyEl && qtyEl.value || 0) || 0;
     const price = parseFloat(priceEl && priceEl.value || 0) || 0;
     const total = qty * price;
     grand += total;
@@ -247,7 +328,7 @@ function resetSaveStatus() {
 }
 
 // إضافة مستمعات الأحداث لإعادة تعيين حالة الحفظ
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function () {
   // إعادة تعيين حالة الحفظ عند تغيير أي حقل
   const inputs = document.querySelectorAll('input, textarea, select');
   inputs.forEach(input => {
@@ -256,12 +337,12 @@ document.addEventListener('DOMContentLoaded', function() {
   });
 });
 
-function printDocument() { 
+function printDocument() {
   if (!isDocumentSaved) {
     alert('⚠️ لا يمكن الطباعة قبل حفظ الطلب. يرجى الحفظ أولاً.');
     return;
   }
-  window.print(); 
+  window.print();
 }
 
 // ================== الحفظ مع التحقق ==================
@@ -269,11 +350,11 @@ function savePurchaseRequest() {
   calculateGrandTotal(); // حساب المجموع قبل الإرسال
 
   // عناصر الحقول الإلزامية
-  const requesterEl       = document.getElementById('requester');
-  const departmentEl      = document.getElementById('department');
+  const requesterEl = document.getElementById('requester');
+  const departmentEl = document.getElementById('department');
   const deliveryAddressEl = document.getElementById('deliveryAddress');
-  const deliveryDateEl    = document.getElementById('deliveryDate');
-  const projectCodeEl     = document.getElementById('projectCode');
+  const deliveryDateEl = document.getElementById('deliveryDate');
+  const projectCodeEl = document.getElementById('projectCode');
 
   // تحقق وجود العناصر
   if (!requesterEl || !departmentEl || !deliveryAddressEl || !deliveryDateEl || !projectCodeEl) {
@@ -282,11 +363,11 @@ function savePurchaseRequest() {
   }
 
   // قراءة القيم
-  const requester       = requesterEl.value.trim();
-  const department      = departmentEl.value.trim();
+  const requester = requesterEl.value.trim();
+  const department = departmentEl.value.trim();
   const deliveryAddress = deliveryAddressEl.value.trim();
-  const deliveryDate    = deliveryDateEl.value.trim();
-  const projectCode     = projectCodeEl.value.trim();
+  const deliveryDate = deliveryDateEl.value.trim();
+  const projectCode = projectCodeEl.value.trim();
 
   // تحقق الإلزامية
   if (!requester || !department || !deliveryAddress || !deliveryDate || !projectCode) {
@@ -308,7 +389,7 @@ function savePurchaseRequest() {
     return;
   }
 
-  const grandText   = document.getElementById('grandTotal').textContent;
+  const grandText = document.getElementById('grandTotal').textContent;
   const totalAmount = parseFloat(grandText.replace(/[^0-9.]/g, '')) || 0;
 
   // جمع بيانات جدول الموافقات
@@ -337,11 +418,10 @@ function savePurchaseRequest() {
     order_number: orderNumberInput.value, // يبدأ بـ PR- ومضمون
     currency: document.getElementById('currency').value,
     total_amount: totalAmount,
-    additional_notes: document.getElementById('additionalNotes').value.trim(),
     approval_data: approvalData,
     items: []
   };
-  
+
   console.log('🔍 Debug - approvalData:', approvalData);
   console.log('🔍 Debug - payload:', payload);
 
@@ -352,13 +432,13 @@ function savePurchaseRequest() {
     const specEl = row.cells[2].querySelector('textarea, input');
     const unitEl = row.cells[3].querySelector('input');
 
-    const qtyEl   = row.cells[4].querySelector('input');
+    const qtyEl = row.cells[4].querySelector('input');
     const priceEl = row.cells[5].querySelector('input');
 
-    const name  = (nameEl  && nameEl.value  || '').trim();
-    const spec  = (specEl  && specEl.value  || '').trim();
-    const unit  = (unitEl  && unitEl.value  || '').trim();
-    const qty   = parseFloat(qtyEl   && qtyEl.value || 0) || 0;
+    const name = (nameEl && nameEl.value || '').trim();
+    const spec = (specEl && specEl.value || '').trim();
+    const unit = (unitEl && unitEl.value || '').trim();
+    const qty = parseFloat(qtyEl && qtyEl.value || 0) || 0;
     const price = parseFloat(priceEl && priceEl.value || 0) || 0;
 
     // تحقق من أن العنصر له بيانات
@@ -414,36 +494,36 @@ function savePurchaseRequest() {
     },
     body: JSON.stringify(payload)
   })
-  .then(r => {
-    if (r.status === 401) {
-      alert('⚠️ انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى');
-      localStorage.removeItem('token');
-      localStorage.removeItem('user');
-      window.location.href = 'login.html';
-      return;
-    }
-    return r.json();
-  })
-  .then(res => {
-    if (res && res.error) {
-      alert('حدث خطأ: ' + res.error);
-      isDocumentSaved = false;
-    }
-    else if (res && res.id) {
-      alert('✅ تم الحفظ بنجاح. رقم المعرف: ' + res.id);
-      isDocumentSaved = true;
-      const printBtn = document.getElementById('printBtn');
-      if (printBtn) {
-        printBtn.disabled = false;
-        printBtn.title = '';
+    .then(r => {
+      if (r.status === 401) {
+        alert('⚠️ انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى');
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = 'login.html';
+        return;
       }
-    }
-    else {
-      alert('❌ حدث خطأ غير متوقع');
-      isDocumentSaved = false;
-    }
-  })
-  .catch(err => alert('خطأ اتصال بالخادم: ' + err));
+      return r.json();
+    })
+    .then(res => {
+      if (res && res.error) {
+        alert('حدث خطأ: ' + res.error);
+        isDocumentSaved = false;
+      }
+      else if (res && res.id) {
+        alert('✅ تم الحفظ بنجاح. رقم المعرف: ' + res.id);
+        isDocumentSaved = true;
+        const printBtn = document.getElementById('printBtn');
+        if (printBtn) {
+          printBtn.disabled = false;
+          printBtn.title = '';
+        }
+      }
+      else {
+        alert('❌ حدث خطأ غير متوقع');
+        isDocumentSaved = false;
+      }
+    })
+    .catch(err => alert('خطأ اتصال بالخادم: ' + err));
 }
 
 // (اختياري) عرض كل الطلبات

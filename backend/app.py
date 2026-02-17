@@ -1,7 +1,12 @@
-# backend/app.py
+"""
+نقطة تجميع التطبيق — Flask Application Factory
+"""
+
 import os
+import logging
 from flask import Flask, jsonify
 from flask_cors import CORS
+from .config import CORS_ORIGINS
 from .database import Base, engine
 from .routes.requests import bp as requests_bp
 from .routes.admin import bp as admin_bp
@@ -11,20 +16,60 @@ from .routes.upload import bp as upload_bp
 from .routes.procurement import bp as procurement_bp
 from .routes.notifications import bp as notifications_bp
 
+logger = logging.getLogger(__name__)
+
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 
+
 def create_app():
-    # نخدّم الواجهة من نفس التطبيق (ينهي CORS)
+    """إنشاء وتهيئة تطبيق Flask"""
     app = Flask(__name__, static_folder=FRONTEND_DIR, static_url_path="")
 
-    # بإمكانك ترك CORS مفتوح للتطوير لمسارات /api/* أو إزالته لأن الواجهة على نفس الأصل
-    CORS(app, resources={r"/api/*": {"origins": "*"}})
+    # CORS
+    origins = CORS_ORIGINS if CORS_ORIGINS != "*" else "*"
+    CORS(app, resources={r"/api/*": {"origins": origins}})
+
+    # ضمان وجود مجلد قاعدة البيانات
+    os.makedirs(os.path.join(BASE_DIR, "database"), exist_ok=True)
+
+    # ─── نسخ احتياطي تلقائي قبل أي تغيير هيكلي ───
+    try:
+        from .utils.backup import backup_database
+        backup_database("startup")
+    except Exception as e:
+        logger.warning(f"فشل النسخ الاحتياطي: {e}")
+
+    # ─── حفظ snapshot للحالات قبل التعديل ───
+    status_snapshot = {}
+    try:
+        from .utils.integrity import protect_approved_requests
+        status_snapshot = protect_approved_requests()
+    except Exception as e:
+        logger.warning(f"فشل حفظ snapshot الحالات: {e}")
 
     # إنشاء/تحديث جداول قاعدة البيانات
     Base.metadata.create_all(bind=engine)
 
-    # صفحة البداية -> login.html
+    # تحديث قاعدة البيانات لإضافة الأعمدة المفقودة
+    try:
+        from .migrate_db import migrate_database
+        migrate_database()
+    except Exception as e:
+        logger.warning(f"فشل تحديث قاعدة البيانات: {e}")
+
+    # ─── فحص سلامة البيانات بعد التحديث ───
+    try:
+        from .utils.integrity import verify_data_integrity, check_status_regression
+        # التحقق من عدم تراجع الحالات
+        if status_snapshot:
+            check_status_regression(status_snapshot)
+        # فحص شامل للتناسق
+        verify_data_integrity()
+    except Exception as e:
+        logger.warning(f"فشل فحص السلامة: {e}")
+
+    # الصفحة الرئيسية → login.html
     @app.get("/")
     def index():
         return app.send_static_file("login.html")
@@ -35,19 +80,9 @@ def create_app():
         return jsonify({"status": "ok"})
 
     # تسجيل الـ blueprints
-    app.register_blueprint(requests_bp)
-    app.register_blueprint(admin_bp)
-    app.register_blueprint(auth_bp)
-    app.register_blueprint(workflow_bp)
-    app.register_blueprint(upload_bp)
-    app.register_blueprint(procurement_bp)
-    app.register_blueprint(notifications_bp)
+    for bp in (requests_bp, admin_bp, auth_bp, workflow_bp,
+               upload_bp, procurement_bp, notifications_bp):
+        app.register_blueprint(bp)
 
+    logger.info("تم تشغيل التطبيق بنجاح")
     return app
-
-# تشغيل مباشر (اختياري عند تشغيل الملف نفسه)
-if __name__ == "__main__":
-    _app = create_app()
-    _app.config['ADMIN_USER'] = 'admin'
-    _app.config['ADMIN_PASS'] = 'admin123'
-    _app.run(host="0.0.0.0", port=5000, debug=True)

@@ -1,5 +1,5 @@
 from typing import Iterable, Optional
-from datetime import datetime
+from datetime import datetime, timezone
 from ..models import Notification
 
 
@@ -17,7 +17,7 @@ def create_notification(
 ):
     """إنشاء إشعارات متعددة وتخزينها في قاعدة البيانات."""
     created = []
-    now = datetime.utcnow()
+    now = datetime.now(timezone.utc)
     for recipient in recipients:
         if not recipient:
             continue

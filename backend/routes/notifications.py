@@ -47,7 +47,7 @@ def mark_notification_read(notification_id):
     username = user.get("username")
     db = SessionLocal()
     try:
-        notification = db.query(Notification).get(notification_id)
+        notification = db.get(Notification, notification_id)
         if not notification or notification.recipient_username != username:
             return jsonify({"error": "الإشعار غير موجود"}), 404
         notification.is_read = True

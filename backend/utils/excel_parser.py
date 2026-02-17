@@ -1,11 +1,18 @@
 """
 أدوات لقراءة ملفات Excel وتحويلها إلى أنواع حسابات
 """
-import pandas as pd
 import os
 from typing import List, Dict
 from ..models import AccountType
 from ..database import SessionLocal
+
+# استيراد pandas بشكل اختياري
+try:
+    import pandas as pd
+    PANDAS_AVAILABLE = True
+except ImportError:
+    PANDAS_AVAILABLE = False
+    pd = None
 
 def parse_excel_account_types(file_path: str) -> List[Dict]:
     """
@@ -18,6 +25,8 @@ def parse_excel_account_types(file_path: str) -> List[Dict]:
     - Description: وصف الحساب (اختياري)
     - Parent_ID: رقم الحساب الأب (اختياري)
     """
+    if not PANDAS_AVAILABLE:
+        raise ImportError("pandas غير مثبت. يرجى تثبيته باستخدام: pip install pandas openpyxl")
     try:
         # قراءة ملف Excel
         df = pd.read_excel(file_path)

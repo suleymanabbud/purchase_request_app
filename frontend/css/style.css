@@ -177,17 +177,17 @@ body, td, th, input, select, textarea, button {
   background: #698163;
   color: #fff;
   border: 1px solid #000;
-  padding: 12px 8px;
+  padding: 8px 6px;           /* تقليل ارتفاع رأس الجدول */
   text-align: center;
-  font-size: 14px;
+  font-size: 13px;           /* تصغير حجم خط العناوين */
   font-weight: bold;
 }
 
 .items-table td {
   border: 1px solid #000;
-  padding: 8px;
+  padding: 3px 5px;              /* صفوف أنحف لجدول أقل ارتفاعاً */
   text-align: center;
-  font-size: 13px;
+  font-size: 12px;              /* تصغير خط محتوى الجدول */
   background: #fff;
   color: #000;
 }
@@ -204,6 +204,21 @@ body, td, th, input, select, textarea, button {
   color: #000;
 }
 .items-table input:focus { outline: 2px solid #698163; border-radius: 4px; }
+
+/* حقول النص داخل جدول الأصناف: ارتفاع ديناميكي حسب النص */
+.items-table textarea {
+  width: 100%;
+  border: none;
+  background: transparent;
+  font-family: inherit;
+  font-size: 13px;
+  line-height: 1.3;
+  padding: 2px 4px;
+  resize: vertical;          /* يمكن تكبيرها يدوياً عند الحاجة */
+  height: auto;              /* الارتفاع يعتمد على النص */
+  min-height: 32px;          /* حد أدنى معقول لكل صف */
+  box-sizing: border-box;
+}
 
 /* سطر المجموع الكلي – شاشة */
 .items-table tfoot .total-row td,
@@ -336,196 +351,51 @@ body, td, th, input, select, textarea, button {
 }
 
 /* ========= إعدادات الصفحة للطباعة ========= */
-@page { 
-  size: A4 portrait; 
-  margin: 5mm 3mm; 
+/* نضبط فقط حجم الصفحة والهامش، ونترك الباقي للتنسيق الافتراضي مع تصغير بسيط للأحجام */
+@page {
+  size: A4 portrait;
+  margin: 5mm;        /* تقليل الهامش لاستغلال ارتفاع الصفحة أكثر */
 }
 
-/* ========= تحسين الطباعة ========= */
 @media print {
   html, body {
-    background: #fff !important;
+    background: #fff;
     -webkit-print-color-adjust: exact;
     print-color-adjust: exact;
-    font-size: 10px !important;
-    line-height: 1.2 !important;
+    font-size: 10px;   /* خط صغير ليتحمل عدد بنود أكبر */
+    line-height: 1.2;  /* تباعد بسيط بين الأسطر */
   }
 
-  /* إخفاء العودة للرئيسية في الطباعة */
+  /* إخفاء زر/رابط العودة فقط */
   .back-to-main,
   .back-btn,
   .return-btn,
   a[href="index.html"] {
-    display: none !important;
+    display: none;
   }
 
+  /* إزالة الظلال والإطارات القوية في الطباعة */
   .document-container {
-    max-width: 100% !important;
-    box-shadow: none !important;
-    border: none !important;
-    padding: 0 !important;
-    margin: 0 !important;
-  }
-  
-  /* ضغط المحتوى للطباعة في صفحة واحدة */
-  .main-title {
-    font-size: 14px !important;
-    margin: 5px 0 !important;
-  }
-  
-  .header {
-    padding: 5px !important;
-    margin: 0 !important;
-  }
-  
-  .info-row {
-    margin: 2px 0 !important;
-  }
-  
-  .items-table {
-    font-size: 9px !important;
-  }
-  
-  .items-table th,
-  .items-table td {
-    padding: 2px 3px !important;
-  }
-  
-  .approval-table {
-    font-size: 9px !important;
-  }
-  
-  .approval-table th,
-  .approval-table td {
-    padding: 2px 3px !important;
+    max-width: 100%;
+    box-shadow: none;
+    border-radius: 0;
   }
 
-  .add-row-btn, .print-btn { display: none !important; }
-
-  /* اجعل المدخلات نصية في الطباعة:
-     - نطبّق الخط الأخضر فقط على مدخلات رأس الصفحة */
-  .header .info-input,
-  .header .currency-select {
-    background: transparent !important;
-    box-shadow: none !important;
-    outline: none !important;
-    border: none !important;
-    border-bottom: 1px solid #698163 !important;  /* خط سفلي أخضر */
-    border-radius: 0 !important;
-    padding: 1px 0 !important;
-    height: auto !important;
-    color: #000 !important;
-  }
-
-  /* بقية المدخلات تبقى بلا حدود (لا تتلوّن بالخط الأخضر) */
-  .items-table input,
-  .approval-input,
-  .notes-textarea,
-  input[type="text"],
-  input[type="number"],
-  input[type="date"],
-  textarea,
-  select {
-    background: transparent !important;
-    box-shadow: none !important;
-    outline: none !important;
-    border: none !important;                 /* لا حدود هنا */
-    border-radius: 0 !important;
-    padding: 1px 0 !important;
-    height: auto !important;
-    color: #000 !important;
-    font-size: 9px !important;
-  }
-  
-  /* ضغط النصوص والمسافات */
-  .sarh {
-    font-size: 10px !important;
-    margin: 2px 0 !important;
-  }
-  
-  .section-title {
-    font-size: 11px !important;
-    margin: 3px 0 !important;
-  }
-  
-  .info-label {
-    font-size: 9px !important;
-  }
-  
-  .info-input {
-    font-size: 9px !important;
-    padding: 1px 2px !important;
-  }
-  
-  /* ضغط الجداول */
+  /* الجداول بخط أصغر وعرض كامل */
   table {
-    page-break-inside: avoid;
-    font-size: 8px !important;
-  }
-  
-  th, td {
-    padding: 1px 2px !important;
-    font-size: 8px !important;
+    width: 100%;
+    font-size: 9px;     /* خط الجداول يبقى صغيراً ليتحمّل عدداً أكبر من الصفوف */
   }
 
-  /* إخفاء سهم select */
-  select {
-    -webkit-appearance: none !important;
-    appearance: none !important;
-    background-image: none !important;
-    pointer-events: none !important;
-    padding-right: 0 !important;
-  }
-  select::-ms-expand { display: none !important; }
-
-  /* تثبيت حدود الجداول */
-  .items-table, .items-table th, .items-table td,
-  .approval-table, .approval-table th, .approval-table td {
-    border-color: #000 !important;
+  th,
+  td {
+    padding: 2px 3px;   /* تقليل الهوامش داخل الخلايا */
   }
 
-  /* رؤوس الجداول في الطباعة */
-  .items-table th, .approval-table th {
-    background: #698163 !important;
-    color: #fff !important;
-  }
-
-  table { page-break-inside: auto; }
-  tr, td, th { page-break-inside: avoid; break-inside: avoid; }
-  thead { display: table-header-group; }
-  tfoot { display: table-footer-group; }
-
-  .table-section, .approval-section, .footer-section {
-    page-break-before: auto; page-break-after: auto; margin-bottom: 10px;
-  }
-
-  /* سطر المجموع الكلي – طباعة: استهدف الخلايا مباشرة */
-  .items-table tfoot .total-row td,
-  .total-row td {
-    background-color: #fff3cd !important;  /* أصفر باهت ثابت للطباعة */
-    color: #333 !important;
-  }
-
-  /* الملاحظات الإضافية – طباعة: تأكيد ظهور الإطار والمحتوى */
-  .additional-notes-section {
-    display: block !important;
-    border: 1px solid #000 !important;
-    padding: 8px !important;
-    margin-top: 10px !important;
-    background: #fff !important;
-  }
-  #additionalNotes {
-    display: block !important;
-    border: 1px solid #000 !important;
-    background: #fff !important;
-    color: #000 !important;
-    height: auto !important;
-    min-height: 80px !important;
-    max-height: none !important;
-    overflow: visible !important;
-    resize: none !important;
-    white-space: pre-wrap !important;
-    word-break: break-word !important;
+  /* تصغير عنوان النموذج قليلاً في الطباعة */
+  .main-title {
+    font-size: 18px;
+    margin: 8px 0;
   }
 }
 
@@ -533,36 +403,52 @@ body, td, th, input, select, textarea, button {
 @media screen {
   select { -webkit-appearance: auto; appearance: auto; }
 }
-/* ===== إصلاح تسرّب الحدود في بطاقة المورّد/الشركة عند الطباعة ===== */
+/* ===== إصلاح تسرّب الحدود في بطاقة المورّد/الشركة عند الطباعة + جعل الأصناف أقل طولاً ===== */
 @media print {
-  /* أعطِ حافة داخلية للحاوية حتى لا تلتصق الحدود بحافة الصفحة */
+  /* حافة داخلية خفيفة للحاوية مع إلغاء الـ flex حتى لا يُجبر الجدول أن يملأ ارتفاع الصفحة */
   .document-container {
-    padding: 8mm !important;        /* بدل 0 */
-    border-radius: 1 !important;
+    padding: 4mm !important;
+    border-radius: 0 !important;
+    min-height: auto !important;
+    display: block !important;
   }
+
+  /* جدول الأصناف يأخذ ارتفاعه الطبيعي فقط */
+  .table-section {
+    display: block !important;
+  }
+
+  .items-table,
+  .items-table tbody,
+  .items-table tr {
+    height: auto !important;
+  }
+
+  /* حقول النص داخل جدول الأصناف في الطباعة: نجعل الصف أطول قليلاً ليرتفع الجدول */
   .items-table textarea {
     height: auto !important;
-    min-height: 80px !important;  /* يمكنك تحديد الحد الأدنى للارتفاع هنا */
+    min-height: 26px !important;   /* زيادة ارتفاع كل صنف */
+    line-height: 1.2 !important;
+    font-size: 10px !important;    /* تكبير النص داخل تفاصيل الصنف */
   }
-}
-  
+
   /* صف الرأس: لا تسمح بالتكسّر الغريب */
   .header {
     display: flex !important;
-    flex-wrap: nowrap !important;    /* لا يلف الأعمدة */
+    flex-wrap: nowrap !important;
     align-items: stretch !important;
-    gap: 12px !important;            /* gap مضبوط */
+    gap: 12px !important;
     page-break-inside: avoid !important;
   }
 
   /* البطاقتان بداخل الرأس: مقاس دقيق يأخذ الـ gap بالاعتبار */
   .supplier-info,
   .company-info {
-    width: calc(50% - 6px) !important; /* نصف العرض ناقص نصف الـ gap */
-    border: 1px solid #000 !important; /* حدود واضحة للطباعة */
+    width: calc(50% - 6px) !important;
+    border: 1px solid #000 !important;
     background: #fff !important;
-    overflow: hidden !important;       /* يمنع خروج المحتوى */
-    box-sizing: border-box !important; /* لتضمين الـ padding والحدود */
+    overflow: hidden !important;
+    box-sizing: border-box !important;
     page-break-inside: avoid !important;
   }
 
@@ -581,15 +467,15 @@ body, td, th, input, select, textarea, button {
 
   /* اجعل الليبل ثابت العرض والمدخل يتمدّد بأمان */
   .info-label {
-    width: 110px !important;          /* اضبطه قليلًا للطباعة */
+    width: 110px !important;
     flex: 0 0 auto !important;
   }
   .header .info-input,
   .header .currency-select {
-    min-width: 0 !important;          /* يسمح للمدخل بالتصغير بدل دفع الحدود */
+    min-width: 0 !important;
   }
   
-  /* منع تقسيم العناصر عبر الصفحات */
+  /* منع تقسيم العناصر عبر الصفحات قدر الإمكان */
   .document-container {
     page-break-inside: avoid !important;
   }
@@ -620,12 +506,8 @@ body, td, th, input, select, textarea, button {
   .approval-table {
     page-break-inside: avoid !important;
   }
-  
-  /* إذا كان الجدول كبيراً جداً، قلل حجم الخط قليلاً */
-  @page {
-    size: A4;
-    margin: 15mm;
-  }
+}
+
 textarea {
     width: 100%;
     height: 80px;

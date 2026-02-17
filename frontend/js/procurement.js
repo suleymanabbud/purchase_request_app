@@ -182,7 +182,7 @@ function renderDetailGrid(request) {
     const fields = [
         { label: 'مقدم الطلب', value: request.requester },
         { label: 'القسم', value: request.department },
-        { label: 'التاريخ', value: request.created_at ? new Date(request.created_at).toLocaleDateString('ar-SA') : '-' },
+        { label: 'التاريخ', value: request.created_at ? new Date(request.created_at).toLocaleDateString('en-GB') : '-' },
         { label: 'موعد التسليم', value: request.delivery_date || '-' },
         { label: 'عنوان التسليم', value: request.delivery_address || '-' },
         { label: 'رمز المشروع', value: request.project_code || '-' },

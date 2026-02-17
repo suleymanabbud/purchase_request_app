@@ -1,0 +1,208 @@
+/* ──────────────────────────────────────────
+   أنماط مشتركة بين لوحات التحكم
+   dashboard-common.css
+   يُكمّل dashboard.css بأنماط إضافية
+   ────────────────────────────────────────── */
+
+/* ======= شبكة التفاصيل (detail-grid) — تكميلي ======= */
+
+.detail-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+    gap: 18px;
+    margin-bottom: 24px;
+}
+
+.detail-item {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    padding: 12px 16px;
+    background: var(--bg-input, #FAFAF8);
+    border-radius: var(--radius-sm, 8px);
+    border: 1px solid var(--border-light, #F0ECE6);
+    transition: var(--transition, 0.25s ease);
+}
+
+.detail-item:hover {
+    border-color: var(--border, #E8E4DD);
+    background: white;
+}
+
+.detail-label {
+    font-weight: 600;
+    color: #8B95A5;
+    font-size: 11px;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+.detail-value {
+    font-size: 15px;
+    color: var(--primary-dark, #0F2E25);
+    font-weight: 500;
+}
+
+
+/* ======= جدول البنود في المودال ======= */
+
+.items-list {
+    margin-top: 24px;
+}
+
+.items-list h4 {
+    color: var(--primary-dark, #0F2E25);
+    margin-bottom: 14px;
+    font-size: 15px;
+    font-weight: 700;
+}
+
+.items-table-modal {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 13px;
+    border-radius: var(--radius-md, 12px);
+    overflow: hidden;
+    border: 1px solid var(--border, #E8E4DD);
+}
+
+.items-table-modal th {
+    background: linear-gradient(180deg, var(--primary, #1B4D3E), var(--primary-dark, #0F2E25));
+    color: white;
+    padding: 12px 10px;
+    text-align: center;
+    font-size: 12px;
+    font-weight: 600;
+    letter-spacing: 0.3px;
+}
+
+.items-table-modal td {
+    padding: 11px 10px;
+    border-bottom: 1px solid var(--border-light, #F0ECE6);
+    text-align: center;
+    color: #4A5568;
+}
+
+.items-table-modal tbody tr {
+    transition: var(--transition, 0.25s ease);
+}
+
+.items-table-modal tbody tr:hover {
+    background: var(--bg-hover, #F9F7F4);
+}
+
+.items-table-modal tfoot td {
+    background: linear-gradient(180deg, #FAFAF8, #F4F2EE);
+    font-weight: 700;
+    color: var(--primary-dark, #0F2E25);
+    border-top: 2px solid var(--border, #E8E4DD);
+}
+
+
+/* ======= رسائل الحالة ======= */
+
+.status-message {
+    padding: 16px 20px;
+    border-radius: var(--radius-md, 12px);
+    text-align: center;
+    font-weight: 600;
+    margin-top: 20px;
+    font-size: 14px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+
+.status-message.approved {
+    background: var(--success-bg, rgba(13, 128, 80, 0.08));
+    color: var(--success, #0D8050);
+    border: 1px solid rgba(13, 128, 80, 0.15);
+}
+
+.status-message.rejected {
+    background: var(--danger-bg, rgba(194, 48, 48, 0.08));
+    color: var(--danger, #C23030);
+    border: 1px solid rgba(194, 48, 48, 0.15);
+}
+
+
+/* ======= رأس تفاصيل الطلب ======= */
+
+.request-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 16px;
+    border-bottom: 2px solid var(--border-light, #F0ECE6);
+}
+
+
+/* ======= زر إنشاء طلب ======= */
+
+.create-request-btn {
+    background: linear-gradient(135deg, var(--primary, #1B4D3E), var(--primary-light, #2A6F5A));
+    color: white;
+    border: none;
+    padding: 10px 22px;
+    border-radius: var(--radius-sm, 8px);
+    cursor: pointer;
+    font-weight: 600;
+    font-size: 13px;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: var(--transition, 0.25s ease);
+    box-shadow: 0 2px 8px rgba(27, 77, 62, 0.2);
+    font-family: var(--font-body, 'Tajawal', sans-serif);
+}
+
+.create-request-btn:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(27, 77, 62, 0.3);
+    background: linear-gradient(135deg, var(--primary-light, #2A6F5A), var(--primary, #1B4D3E));
+}
+
+.top-actions {
+    display: none;
+    align-items: center;
+    gap: 10px;
+}
+
+
+/* ======= أنماط الطباعة ======= */
+
+@media print {
+
+    .navigation,
+    .nav-btn,
+    .user-dropdown,
+    .top-bar,
+    .logout-btn,
+    .action-btn,
+    .filter-section,
+    .sidebar-overlay,
+    .dropdown-menu,
+    .filters-section,
+    .sidebar,
+    .modal-actions,
+    .close-btn {
+        display: none !important;
+    }
+
+    .main-content {
+        margin: 0 !important;
+        padding: 10px !important;
+    }
+
+    body {
+        background: white !important;
+        color: black !important;
+    }
+
+    .stat-card {
+        box-shadow: none !important;
+        border: 1px solid #ddd !important;
+    }
+}

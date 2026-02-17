@@ -1,28 +1,30 @@
-Write-Host "Starting deployment..." -ForegroundColor Green
+Write-Host "========================================" -ForegroundColor Green
+Write-Host "   نشر نظام طلبات الشراء على VPS" -ForegroundColor Green
+Write-Host "========================================" -ForegroundColor Green
 
-Write-Host "Step 1: Update system..." -ForegroundColor Yellow
-ssh root@72.60.32.88 "apt update"
+Write-Host "1. تحديث النظام..." -ForegroundColor Yellow
+ssh root@72.60.32.88 "apt update && apt upgrade -y"
 
-Write-Host "Step 2: Install requirements..." -ForegroundColor Yellow
+Write-Host "2. تثبيت المتطلبات..." -ForegroundColor Yellow
 ssh root@72.60.32.88 "apt install python3.12 python3.12-venv python3.12-dev python3-pip nginx git curl wget unzip ufw -y"
 
-Write-Host "Step 3: Create app user..." -ForegroundColor Yellow
-ssh root@72.60.32.88 "adduser --system --group --shell /bin/bash purchase_app"
+Write-Host "3. إنشاء مستخدم التطبيق..." -ForegroundColor Yellow
+ssh root@72.60.32.88 "adduser --system --group --shell /bin/bash purchase_app || true"
 ssh root@72.60.32.88 "mkdir -p /opt/purchase_app"
 ssh root@72.60.32.88 "chown purchase_app:purchase_app /opt/purchase_app"
 
-Write-Host "Step 4: Upload code..." -ForegroundColor Yellow
+Write-Host "4. رفع الكود..." -ForegroundColor Yellow
 scp -r . root@72.60.32.88:/opt/purchase_app/
 
-Write-Host "Step 5: Setup environment..." -ForegroundColor Yellow
+Write-Host "5. إعداد البيئة..." -ForegroundColor Yellow
 ssh root@72.60.32.88 "cd /opt/purchase_app && python3.12 -m venv venv"
 ssh root@72.60.32.88 "cd /opt/purchase_app && source venv/bin/activate && pip install -r requirements.txt"
 
-Write-Host "Step 6: Setup database..." -ForegroundColor Yellow
+Write-Host "6. إعداد قاعدة البيانات..." -ForegroundColor Yellow
 ssh root@72.60.32.88 "mkdir -p /opt/purchase_app/database"
 ssh root@72.60.32.88 "chown purchase_app:purchase_app /opt/purchase_app/database"
 
-Write-Host "Step 7: Setup Nginx..." -ForegroundColor Yellow
+Write-Host "7. إعداد Nginx..." -ForegroundColor Yellow
 ssh root@72.60.32.88 "cat > /etc/nginx/sites-available/purchase_app << 'EOF'
 server {
     listen 80;
@@ -49,11 +51,9 @@ EOF"
 
 ssh root@72.60.32.88 "ln -sf /etc/nginx/sites-available/purchase_app /etc/nginx/sites-enabled/"
 ssh root@72.60.32.88 "rm -f /etc/nginx/sites-enabled/default"
-ssh root@72.60.32.88 "nginx -t"
-ssh root@72.60.32.88 "systemctl restart nginx"
-ssh root@72.60.32.88 "systemctl enable nginx"
+ssh root@72.60.32.88 "nginx -t && systemctl restart nginx && systemctl enable nginx"
 
-Write-Host "Step 8: Setup systemd service..." -ForegroundColor Yellow
+Write-Host "8. إعداد Systemd Service..." -ForegroundColor Yellow
 ssh root@72.60.32.88 "cat > /etc/systemd/system/purchase_app.service << 'EOF'
 [Unit]
 Description=Purchase Request App
@@ -74,11 +74,9 @@ RestartSec=3
 WantedBy=multi-user.target
 EOF"
 
-ssh root@72.60.32.88 "systemctl daemon-reload"
-ssh root@72.60.32.88 "systemctl enable purchase_app"
-ssh root@72.60.32.88 "systemctl start purchase_app"
+ssh root@72.60.32.88 "systemctl daemon-reload && systemctl enable purchase_app && systemctl start purchase_app"
 
-Write-Host "Step 9: Setup firewall..." -ForegroundColor Yellow
+Write-Host "9. إعداد جدار الحماية..." -ForegroundColor Yellow
 ssh root@72.60.32.88 "ufw default deny incoming"
 ssh root@72.60.32.88 "ufw default allow outgoing"
 ssh root@72.60.32.88 "ufw allow ssh"
@@ -86,22 +84,11 @@ ssh root@72.60.32.88 "ufw allow 'Nginx Full'"
 ssh root@72.60.32.88 "ufw allow 5000"
 ssh root@72.60.32.88 "ufw --force enable"
 
-Write-Host "Step 10: Test application..." -ForegroundColor Yellow
+Write-Host "10. اختبار التطبيق..." -ForegroundColor Yellow
 Start-Sleep -Seconds 5
 ssh root@72.60.32.88 "systemctl status purchase_app"
 
 Write-Host ""
 Write-Host "========================================" -ForegroundColor Green
-Write-Host "   Deployment completed successfully!" -ForegroundColor Green
-Write-Host "========================================" -ForegroundColor Green
-Write-Host "Access the application at:" -ForegroundColor Cyan
-Write-Host "- HTTP: http://72.60.32.88" -ForegroundColor White
-Write-Host "- HTTP: http://srv1073351.hstgr.cloud" -ForegroundColor White
-Write-Host ""
-Write-Host "Default accounts:" -ForegroundColor Cyan
-Write-Host "- admin/admin123 (System Admin)" -ForegroundColor White
-Write-Host "- manager1/pass123 (Manager)" -ForegroundColor White
-Write-Host "- finance1/pass123 (Finance Manager)" -ForegroundColor White
-Write-Host "- disb1/pass123 (Disbursement Officer)" -ForegroundColor White
-Write-Host "- requester1/pass123 (Requester)" -ForegroundColor White
+Write-Host "Deployment script finished (check server status above)." -ForegroundColor Green
 Write-Host "========================================" -ForegroundColor Green

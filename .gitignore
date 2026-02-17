@@ -1,4 +1,37 @@
-venv/
+# Python
 __pycache__/
 *.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+
+# البيئة الافتراضية
+.venv/
+venv/
+env/
+
+# قاعدة البيانات
 database/*.db
+
+# متغيرات البيئة
+.env
+
+# رفع الملفات
+backend/uploads/
+
+# IDE
+.vscode/
+.idea/
+
+# نظام التشغيل
+.DS_Store
+Thumbs.db
+
+# اختبارات
+.pytest_cache/
+htmlcov/
+.coverage
+
+# Gemini
+.gemini/

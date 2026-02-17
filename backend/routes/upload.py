@@ -6,12 +6,12 @@ from werkzeug.utils import secure_filename
 import os
 from ..utils.auth import require_auth_and_roles, require_auth
 from ..utils.excel_parser import process_excel_file
+from ..config import UPLOAD_FOLDER
 
 bp = Blueprint("upload", __name__, url_prefix="/api")
 
 # إعدادات رفع الملفات
 ALLOWED_EXTENSIONS = {'xlsx', 'xls'}
-UPLOAD_FOLDER = 'backend/uploads'
 
 def allowed_file(filename):
     """التحقق من نوع الملف المسموح"""
@@ -51,7 +51,7 @@ def upload_account_types():
         # حذف الملف المؤقت
         try:
             os.remove(file_path)
-        except:
+        except Exception:
             pass
         
         if result['success']:

@@ -1,223 +1,32 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>نظام إدارة المشتريات</title>
     <link rel="stylesheet" href="./css/fonts.css">
-    <link href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@400;500;700&display=swap"
+        rel="stylesheet">
     <style>
-        .nav-btn {
-    text-decoration: none; /* إزالة الخط */
-    border: none;          /* إزالة الحدود */
-}
-
-        body {
-            box-sizing: border-box;
-        }
-        
+        /* ======= إعادة تعيين ======= */
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
-        
+
         body {
             font-family: 'Amiri', 'Tajawal', serif;
-            background: linear-gradient(135deg, #698163 0%, #5a6f56 100%);
-            direction: rtl;
-            min-height: 100vh;
-        }
-        
-        .main-container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 90px 20px 20px 20px;
-        }
-        
-        .header {
-            text-align: center;
-            margin-bottom: 40px;
-            background: rgba(255, 255, 255, 0.95);
-            padding: 30px;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
-        }
-        
-        .main-title {
-            font-size: 42px;
-            font-weight: bold;
-            color: #698163;
-            margin-bottom: 10px;
-            text-shadow: 2px 2px 4px rgba(0,0,0,0.1);
-        }
-        
-        .subtitle {
-            font-size: 18px;
-            color: #666;
-            margin-bottom: 20px;
-        }
-        
-        .navigation {
-            display: flex;
-            justify-content: center;
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-        
-        .nav-btn {
-            background: #698163;
-            color: white;
-            border: none;
-            padding: 15px 30px;
-            border-radius: 10px;
-            cursor: pointer;
-            font-family: inherit;
-            font-size: 16px;
-            font-weight: bold;
-            transition: all 0.3s;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.2);
-        }
-        
-        .nav-btn:hover {
-            background: #5a6f56;
-            transform: translateY(-2px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-        
-        .nav-btn.active {
-            background: #000;
-            transform: translateY(-2px);
-        }
-        
-        .logout-btn {
-            background: #e74c3c !important;
-        }
-        
-        .logout-btn:hover {
-            background: #c0392b !important;
-        }
-        
-        .app-container {
-            background: rgba(255, 255, 255, 0.98);
-            border-radius: 15px;
-            box-shadow: 0 15px 40px rgba(0,0,0,0.2);
-            overflow: hidden;
-            min-height: 600px;
-            position: relative;
-            z-index: 10;
-        }
-        
-        .app-content {
-            display: none;
-            padding: 30px;
-        }
-        
-        .app-content.active {
-            display: block;
-        }
-        
-        .welcome-screen {
-            text-align: center;
-            padding: 80px 20px;
-            color: #698163;
-        }
-        
-        .welcome-screen h2 {
-            font-size: 32px;
-            margin-bottom: 20px;
-        }
-        
-        .welcome-screen p {
-            font-size: 18px;
-            line-height: 1.6;
-            max-width: 600px;
-            margin: 0 auto;
-        }
-        
-        .app-cards {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 30px;
-            margin-top: 40px;
-        }
-        
-        .app-card {
-            background: linear-gradient(135deg, #698163, #5a6f56);
-            color: white;
-            padding: 30px;
-            border-radius: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.2);
-        }
-        
-        .app-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 12px 35px rgba(0,0,0,0.3);
-        }
-        
-        .app-card h3 {
-            font-size: 24px;
-            margin-bottom: 15px;
-        }
-        
-        .app-card p {
-            font-size: 16px;
-            line-height: 1.5;
-            opacity: 0.9;
-        }
-        
-        .app-icon {
-            font-size: 48px;
-            margin-bottom: 20px;
-            display: block;
-        }
-        
-        .placeholder-content {
-            text-align: center;
-            padding: 100px 20px;
-            color: #698163;
-        }
-        
-        .placeholder-content h2 {
-            font-size: 28px;
-            margin-bottom: 15px;
-        }
-        
-        .placeholder-content p {
-            font-size: 16px;
-            opacity: 0.7;
-        }
-        
-        @media (max-width: 768px) {
-            .navigation {
-                flex-direction: column;
-                align-items: center;
-            }
-            
-            .nav-btn {
-                width: 200px;
-            }
-            
-            .main-title {
-                font-size: 32px;
-            }
-            
-            .app-cards {
-                grid-template-columns: 1fr;
-            }
-            
-        }
-
-        /* ===== Enhancements merged ===== */
-        body {
             background: linear-gradient(135deg, #698163 0%, #5a6f56 50%, #4a5a47 100%);
             background-attachment: fixed;
+            direction: rtl;
+            min-height: 100vh;
             position: relative;
             overflow-x: hidden;
         }
+
         body::before {
             content: '';
             position: fixed;
@@ -225,432 +34,173 @@
             left: 0;
             width: 100%;
             height: 100%;
-            background: radial-gradient(circle at 20% 80%, rgba(255,255,255,0.1) 0%, transparent 50%),
-                        radial-gradient(circle at 80% 20%, rgba(255,255,255,0.05) 0%, transparent 50%);
+            background: radial-gradient(circle at 20% 80%, rgba(255, 255, 255, 0.1) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 255, 255, 0.05) 0%, transparent 50%);
             pointer-events: none;
             z-index: -1;
         }
-        .header {
-            padding: 40px;
-            border-radius: 20px;
-            box-shadow: 0 20px 60px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-            position: relative;
-            overflow: visible;
-        }
-        .header::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: linear-gradient(90deg, #698163, #5a6f56, #698163);
-            background-size: 200% 100%;
-            animation: shimmer 3s ease-in-out infinite;
-        }
-        @keyframes shimmer {
-            0%, 100% { background-position: -200% 0; }
-            50% { background-position: 200% 0; }
-        }
-        .subtitle {
-            font-size: 20px;
-            margin-bottom: 30px;
-            font-weight: 500;
-            opacity: 0.8;
-        }
-        .navigation { gap: 25px; flex-wrap: wrap; }
-        .nav-btn {
-            background: linear-gradient(135deg, #698163, #5a6f56);
-            padding: 18px 35px;
-            border-radius: 15px;
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 0 8px 25px rgba(105, 129, 99, 0.3), 0 0 0 1px rgba(255,255,255,0.1);
-            position: relative;
-            overflow: hidden;
-        }
-        .nav-btn::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: -100%;
-            width: 100%;
-            height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
-            transition: left 0.5s;
-        }
-        .nav-btn:hover::before { left: 100%; }
-        .nav-btn:hover {
-            background: linear-gradient(135deg, #5a6f56, #4a5a47);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(105, 129, 99, 0.4), 0 0 0 1px rgba(255,255,255,0.2);
-        }
-        .nav-btn.active {
-            background: linear-gradient(135deg, #2c3e50, #34495e);
-            transform: translateY(-3px) scale(1.02);
-            box-shadow: 0 15px 35px rgba(44, 62, 80, 0.4);
-        }
-        .logout-btn { background: linear-gradient(135deg, #e74c3c, #c0392b) !important; }
-        .logout-btn:hover { background: linear-gradient(135deg, #c0392b, #a93226) !important; }
-        .app-container {
-            border-radius: 20px;
-            box-shadow: 0 25px 70px rgba(0,0,0,0.15), 0 0 0 1px rgba(255,255,255,0.2);
-            backdrop-filter: blur(10px);
-        }
-        .app-content { padding: 40px; animation: fadeIn 0.5s ease-out; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(20px);} to { opacity: 1; transform: translateY(0);} }
-        .welcome-screen h2 { font-weight: 700; position: relative; }
-        .welcome-screen h2::after {
-            content: '';
-            position: absolute;
-            bottom: -10px; left: 50%; transform: translateX(-50%);
-            width: 80px; height: 3px;
-            background: linear-gradient(90deg, #698163, #5a6f56);
-            border-radius: 2px;
-        }
-        .app-cards { grid-template-columns: repeat(auto-fit, minmax(350px, 1fr)); gap: 35px; }
-        .app-card { padding: 40px; border-radius: 20px; box-shadow: 0 15px 40px rgba(105, 129, 99, 0.3), 0 0 0 1px rgba(255,255,255,0.1); position: relative; overflow: hidden; }
-        .app-card::before { content: ''; position: absolute; inset: 0; background: linear-gradient(135deg, rgba(255,255,255,0.1), transparent); opacity: 0; transition: opacity 0.3s; }
-        .app-card:hover::before { opacity: 1; }
-        .app-card:hover { transform: translateY(-8px) scale(1.02); box-shadow: 0 25px 60px rgba(105, 129, 99, 0.4), 0 0 0 1px rgba(255,255,255,0.2); }
-        .app-card h3 { font-size: 28px; font-weight: 700; }
-        .app-icon { font-size: 64px; margin-bottom: 25px; display: block; filter: drop-shadow(0 4px 8px rgba(0,0,0,0.2)); }
-        .placeholder-content { padding: 120px 20px; }
-        .loading-spinner { display: inline-block; width: 20px; height: 20px; border: 3px solid rgba(255,255,255,0.3); border-radius: 50%; border-top-color: #fff; animation: spin 1s ease-in-out infinite; margin-left: 10px; }
-        @keyframes spin { to { transform: rotate(360deg);} }
-        .notification { position: fixed; top: 20px; right: 20px; background: linear-gradient(135deg, #27ae60, #2ecc71); color: #fff; padding: 15px 25px; border-radius: 10px; box-shadow: 0 10px 30px rgba(39,174,96,0.3); transform: translateX(400px); transition: transform 0.3s ease-out; z-index: 1000; }
-        .notification.show { transform: translateX(0); }
-        .notification.error { background: linear-gradient(135deg, #e74c3c, #c0392b); box-shadow: 0 10px 30px rgba(231,76,60,0.3); }
+
+        /* ======= Top Bar ======= */
         .top-bar {
             position: fixed;
             top: 0;
             left: 0;
             right: 0;
             height: 70px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.15) 0%, rgba(255,255,255,0.08) 50%, rgba(255,255,255,0.02) 100%);
+            background: linear-gradient(180deg, rgba(255, 255, 255, 0.15) 0%, rgba(255, 255, 255, 0.08) 50%, rgba(255, 255, 255, 0.02) 100%);
             backdrop-filter: blur(12px);
             display: flex;
             align-items: center;
             justify-content: space-between;
             padding: 0 20px 0 30px;
             z-index: 1000;
-            box-shadow: none;
         }
-        
-        .user-dropdown { 
+
+        /* ======= User Dropdown ======= */
+        .user-dropdown {
             display: flex;
             align-items: center;
             justify-content: center;
             position: relative;
         }
-        .user-menu-btn { 
-            background: rgba(255,255,255,0.1);
-            color: #fff; 
-            border: none; 
-            padding: 0; 
-            cursor: pointer; 
-            display: flex; 
-            align-items: center; 
+
+        .user-menu-btn {
+            background: white;
+            color: #fff;
+            border: none;
+            padding: 0;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
             justify-content: center;
-            transition: all 0.3s ease; 
             width: 52px;
             height: 52px;
             border-radius: 50%;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+            transition: all 0.3s ease;
         }
-        .user-menu-btn:hover { 
+
+        .user-menu-btn:hover {
             transform: scale(1.08);
-            background: rgba(255,255,255,0.15);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.25);
         }
-        .user-menu-btn:active {
-            transform: scale(0.95);
-        }
+
         .user-menu-btn img {
             width: 36px;
             height: 36px;
             object-fit: contain;
             transition: all 0.3s ease;
         }
-        .user-dropdown.open .user-menu-btn {
-            background: rgba(255,255,255,0.2);
-        }
+
         .user-dropdown.open .user-menu-btn img {
             transform: rotate(15deg);
         }
-        .user-info { display: none; }
-        .user-name { display: none; }
-        .user-role { display: none; }
-        .user-avatar { display: none; }
-        .user-menu-btn::after {
-            display: none;
-        }
-        .dropdown-menu { 
-            position: fixed; 
-            top: 0; 
-            right: 0; 
-            width: 300px; 
-            height: 100vh; 
-            background: linear-gradient(135deg, #698163, #5a6f56); 
+
+        .dropdown-menu {
+            position: fixed;
+            top: 0;
+            right: 0;
+            width: 300px;
+            height: 100vh;
+            background: linear-gradient(135deg, #698163, #5a6f56);
             color: white;
-            padding: 80px 0 20px 0; 
-            opacity: 0; 
-            visibility: hidden; 
-            transform: translateX(100%); 
-            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1); 
-            box-shadow: -10px 0 30px rgba(0,0,0,0.3);
+            padding: 80px 0 20px 0;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateX(100%);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: -10px 0 30px rgba(0, 0, 0, 0.3);
             overflow-y: auto;
             z-index: 1001;
         }
-        .user-dropdown.open .dropdown-menu { 
-            opacity: 1; 
-            visibility: visible; 
-            transform: translateX(0); 
+
+        .user-dropdown.open .dropdown-menu {
+            opacity: 1;
+            visibility: visible;
+            transform: translateX(0);
         }
+
         .sidebar-overlay {
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0,0,0,0.5);
+            background: rgba(0, 0, 0, 0.5);
             opacity: 0;
             visibility: hidden;
             transition: all 0.3s ease;
             z-index: 999;
         }
+
         .user-dropdown.open .sidebar-overlay {
             opacity: 1;
             visibility: visible;
         }
-        .dropdown-header { padding: 20px; border-bottom: 1px solid rgba(255,255,255,0.2); margin-bottom: 20px; }
-        .dropdown-user-name { font-size: 18px; font-weight: bold; color: white; margin-bottom: 8px; }
-        .dropdown-user-role { font-size: 14px; color: rgba(255,255,255,0.8); background: rgba(255,255,255,0.1); padding: 6px 15px; border-radius: 20px; display: inline-block; }
-        .dropdown-item { display: flex; align-items: center; gap: 15px; padding: 15px 25px; color: white; text-decoration: none; transition: all 0.3s ease; cursor: pointer; border: none; background: none; width: 100%; text-align: right; font-family: inherit; font-size: 16px; border-radius: 0; }
-        .dropdown-item:hover { background: rgba(255,255,255,0.1); color: white; }
-        .dropdown-item.logout { color: #ff6b6b; border-top: 1px solid rgba(255,255,255,0.2); margin-top: 20px; }
-        .dropdown-item.logout:hover { background: rgba(255,107,107,0.1); color: #ff5252; }
-        .dropdown-icon { font-size: 16px; width: 20px; text-align: center; }
-        
-        /* نظام متابعة سير العملية */
-        .tracking-container {
+
+        .dropdown-header {
             padding: 20px;
-            max-width: 1200px;
-            margin: 0 auto;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+            margin-bottom: 20px;
         }
-        
-        .filter-section {
-            background: rgba(255, 255, 255, 0.9);
-            padding: 20px;
-            border-radius: 15px;
-            margin-bottom: 30px;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-            display: flex;
-            gap: 20px;
-            flex-wrap: wrap;
-            align-items: end;
-        }
-        
-        .filter-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            min-width: 200px;
-        }
-        
-        .filter-group label {
+
+        .dropdown-user-name {
+            font-size: 18px;
             font-weight: bold;
-            color: #698163;
-            font-size: 14px;
-        }
-        
-        .filter-group select,
-        .filter-group input {
-            padding: 10px 15px;
-            border: 2px solid #e0e0e0;
-            border-radius: 8px;
-            font-size: 14px;
-            transition: border-color 0.3s ease;
-        }
-        
-        .filter-group select:focus,
-        .filter-group input:focus {
-            outline: none;
-            border-color: #698163;
-        }
-        
-        .requests-table-container {
-            background: rgba(255, 255, 255, 0.9);
-            border-radius: 15px;
-            overflow: hidden;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
-        }
-        
-        .requests-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-        
-        .requests-table th {
-            background: linear-gradient(135deg, #698163, #5a6f56);
             color: white;
-            padding: 15px 10px;
-            text-align: center;
-            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .dropdown-user-role {
             font-size: 14px;
-        }
-        
-        .requests-table td {
-            padding: 12px 10px;
-            text-align: center;
-            border-bottom: 1px solid #f0f0f0;
-            font-size: 13px;
-        }
-        
-        .requests-table tr:hover {
-            background: rgba(105, 129, 99, 0.05);
-        }
-        
-        .status-badge {
-            padding: 4px 12px;
+            color: rgba(255, 255, 255, 0.8);
+            background: rgba(255, 255, 255, 0.1);
+            padding: 6px 15px;
             border-radius: 20px;
-            font-size: 12px;
-            font-weight: bold;
             display: inline-block;
         }
-        
-        .status-pending {
-            background: #fff3cd;
-            color: #856404;
-        }
-        
-        .status-approved {
-            background: #d4edda;
-            color: #155724;
-        }
-        
-        .status-rejected {
-            background: #f8d7da;
-            color: #721c24;
-        }
-        
-        .status-completed {
-            background: #d1ecf1;
-            color: #0c5460;
-        }
-        
-        .action-btn {
-            background: linear-gradient(135deg, #698163, #5a6f56);
-            color: white;
-            border: none;
-            padding: 6px 12px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            margin: 0 2px;
-            transition: all 0.3s ease;
-        }
-        
-        .action-btn:hover {
-            background: linear-gradient(135deg, #5a6f56, #4a5a47);
-            transform: translateY(-1px);
-        }
-        
-        @media (max-width: 768px) {
-            .filter-section {
-                flex-direction: column;
-                align-items: stretch;
-            }
-            
-            .filter-group {
-                min-width: auto;
-            }
-            
-            .requests-table {
-                font-size: 12px;
-            }
-            
-            .requests-table th,
-            .requests-table td {
-                padding: 8px 5px;
-            }
-        }
-        @media (max-width: 768px) {
-            .top-bar { padding: 0 15px; height: 60px; }
-            .top-bar-brand { padding: 8px 12px; }
-            .top-bar-brand img { width: 34px; height: 34px; padding: 4px; }
-            .top-bar-brand-text .brand-sub { display: none; }
-            .top-bar-title { font-size: 16px; }
-            .top-bar-actions { gap: 8px; }
-            .top-request-btn { display: none; }
-            .top-notifications-panel { right: 15px; width: calc(100% - 30px); top: 80px; }
-            .main-container { padding: 80px 15px 15px 15px; }
-            .navigation { gap: 15px; }
-            .nav-btn { width: 250px; padding: 15px 25px; }
-            .main-title { font-size: 36px; }
-            .app-cards { grid-template-columns: 1fr; gap: 25px; }
-            .header { padding: 30px 20px; }
-            .app-content { padding: 30px 20px; }
-            .welcome-screen { padding: 60px 15px; }
-            .welcome-screen h2 { font-size: 28px; }
-            .welcome-screen p { font-size: 18px; }
-            .user-dropdown { top: 15px; right: 15px; }
-            .user-menu-btn { min-width: 150px; padding: 10px 15px; font-size: 12px; }
-            .dropdown-menu { width: 280px; }
-        }
-        @media (max-width: 480px) {
-            .main-container { padding: 15px; }
-            .main-title { font-size: 28px; }
-            .subtitle { font-size: 16px; }
-            .nav-btn { width: 200px; font-size: 14px; }
-        }
-        .top-bar-content { 
-            display: flex; 
-            align-items: center; 
-            gap: 20px;
-        }
-        .top-bar-brand {
+
+        .dropdown-item {
             display: flex;
             align-items: center;
-            gap: 14px;
-        }
-        .top-bar-brand img {
-            width: 48px;
-            height: 48px;
-            border-radius: 12px;
-            object-fit: contain;
-            background: rgba(255,255,255,0.95);
-            padding: 6px;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
-        }
-        .top-bar-brand-text {
-            display: flex;
-            flex-direction: column;
-            line-height: 1.2;
-            color: #fff;
-        }
-        .top-bar-brand-text .brand-main {
+            gap: 15px;
+            padding: 15px 25px;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+            background: none;
+            width: 100%;
+            text-align: right;
+            font-family: inherit;
             font-size: 16px;
-            font-weight: 700;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.2);
         }
-        .top-bar-brand-text .brand-sub {
-            font-size: 12px;
-            font-weight: 500;
-            opacity: 0.85;
-            letter-spacing: 0.8px;
+
+        .dropdown-item:hover {
+            background: rgba(255, 255, 255, 0.1);
         }
-        .top-bar-title {
-            color: #fff;
-            font-size: 17px;
-            font-weight: 600;
-            letter-spacing: 0.3px;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.15);
-            padding-left: 15px;
-            border-left: 2px solid rgba(255,255,255,0.2);
+
+        .dropdown-item.logout {
+            color: #ff6b6b;
+            border-top: 1px solid rgba(255, 255, 255, 0.2);
+            margin-top: 20px;
         }
-        .top-bar-actions { display: flex; align-items: center; gap: 15px; }
-        .top-request-btn, .top-notification-btn {
+
+        .dropdown-item.logout:hover {
+            background: rgba(255, 107, 107, 0.1);
+            color: #ff5252;
+        }
+
+        .dropdown-icon {
+            font-size: 16px;
+            width: 20px;
+            text-align: center;
+        }
+
+        /* ======= Top Bar Buttons ======= */
+        .top-request-btn,
+        .top-notification-btn {
             border: none;
             border-radius: 14px;
             padding: 10px 18px;
@@ -663,34 +213,36 @@
             gap: 8px;
             transition: transform 0.2s ease, box-shadow 0.2s ease;
         }
+
         .top-request-btn {
             background: linear-gradient(135deg, #27ae60, #2ecc71);
             color: #fff;
             box-shadow: 0 6px 20px rgba(39, 174, 96, 0.3);
-            border-radius: 14px;
             padding: 12px 24px;
-            font-weight: 600;
         }
+
         .top-request-btn:hover {
             transform: translateY(-2px) scale(1.02);
             box-shadow: 0 10px 28px rgba(39, 174, 96, 0.4);
         }
+
         .top-notification-btn {
             position: relative;
-            background: rgba(255,255,255,0.1);
+            background: rgba(255, 255, 255, 0.1);
             color: #fff;
             width: 52px;
             height: 52px;
             justify-content: center;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+            box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
             border-radius: 50%;
             font-size: 20px;
         }
+
         .top-notification-btn:hover {
-            background: rgba(255,255,255,0.15);
+            background: rgba(255, 255, 255, 0.15);
             transform: scale(1.08);
-            box-shadow: 0 8px 25px rgba(0,0,0,0.25);
         }
+
         .top-notification-badge {
             position: absolute;
             top: -6px;
@@ -708,102 +260,856 @@
             font-weight: 700;
             box-shadow: 0 4px 10px rgba(231, 76, 60, 0.4);
         }
+
+        /* ======= Notifications Panel ======= */
         .top-notifications-panel {
             position: fixed;
-            top: 80px;
-            right: 35px;
-            width: 320px;
-            max-height: 420px;
-            background: rgba(255,255,255,0.97);
-            border-radius: 18px;
-            box-shadow: 0 20px 50px rgba(0,0,0,0.18);
-            border: 1px solid rgba(255,255,255,0.6);
-            backdrop-filter: blur(10px);
-            display: none;
-            flex-direction: column;
+            top: 75px;
+            left: 20px;
+            width: 400px;
+            max-height: 520px;
+            background: #fff;
+            box-shadow:
+                0 25px 60px rgba(0, 0, 0, 0.18),
+                0 0 0 1px rgba(0, 0, 0, 0.04);
+            border-radius: 16px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translateY(-12px) scale(0.97);
+            transition: all 0.3s cubic-bezier(0.21, 1.02, 0.73, 1);
+            z-index: 10000;
             overflow: hidden;
-            z-index: 1100;
+            display: flex;
+            flex-direction: column;
+            direction: rtl;
+            font-family: 'Tajawal', sans-serif;
         }
-        .top-notifications-panel.active { display: flex !important; }
+
+        .top-notifications-panel.active {
+            opacity: 1 !important;
+            visibility: visible !important;
+            transform: translateY(0) scale(1) !important;
+        }
+
         .top-notifications-header {
+            padding: 18px 22px;
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            font-weight: bold;
+            font-size: 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .top-notifications-header span {
             display: flex;
             align-items: center;
-            justify-content: space-between;
-            padding: 14px 18px;
-            background: linear-gradient(135deg, rgba(105,129,99,0.15), rgba(90,111,86,0.08));
-            font-size: 14px;
-            font-weight: 600;
-            color: #2c3e50;
+            gap: 8px;
         }
+
+        .top-notifications-header span::before {
+            content: '🔔';
+            font-size: 18px;
+        }
+
         .top-notifications-header button {
-            border: none;
-            background: none;
-            color: #427f77;
+            background: rgba(255, 255, 255, 0.15);
+            color: white;
+            border: 1px solid rgba(255, 255, 255, 0.25);
+            padding: 8px 14px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 12px;
-            font-weight: 600;
+            font-family: 'Tajawal', sans-serif;
+            transition: all 0.2s;
+            white-space: nowrap;
         }
-        .top-notifications-header button:hover { text-decoration: underline; }
+
+        .top-notifications-header button:hover {
+            background: rgba(255, 255, 255, 0.25);
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+
         .top-notifications-list {
             list-style: none;
-            margin: 0;
             padding: 0;
-            max-height: 360px;
+            margin: 0;
             overflow-y: auto;
+            flex: 1;
+            max-height: 430px;
+            background: #fafbfc;
         }
+
+        .top-notifications-list::-webkit-scrollbar {
+            width: 5px;
+        }
+
+        .top-notifications-list::-webkit-scrollbar-thumb {
+            background: #d0d0d0;
+            border-radius: 10px;
+        }
+
         .top-notifications-list li {
-            padding: 14px 18px;
-            border-bottom: 1px solid rgba(236, 240, 241, 0.8);
-            font-size: 13px;
-            line-height: 1.6;
-            color: #34495e;
+            padding: 16px 22px;
+            border-bottom: 1px solid #f0f0f0;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: white;
+            line-height: 1.7;
+            font-size: 13.5px;
+            color: #2c3e50;
         }
+
+        .top-notifications-list li:last-child {
+            border-bottom: none;
+        }
+
+        .top-notifications-list li:hover {
+            background: #f5f7fa;
+        }
+
         .top-notifications-list li.unread {
-            background: rgba(105,129,99,0.08);
-            font-weight: 600;
+            background: linear-gradient(90deg, #f0f7ff 0%, #fff 100%);
+            border-right: 4px solid #427f77;
+            font-weight: 700;
+            color: #1a252f;
         }
-        .top-notifications-list li.top-notifications-empty {
-            text-align: center;
-            color: #7f8c8d;
-            font-weight: 600;
+
+        .top-notifications-list li.unread:hover {
+            background: linear-gradient(90deg, #e5f0fa 0%, #f8f9fa 100%);
         }
-        .top-notifications-list li:last-child { border-bottom: none; }
+
+        .top-notifications-list li div:first-child {
+            font-weight: 700;
+            font-size: 14px;
+            margin-bottom: 4px;
+            color: #2c3e50;
+        }
+
+        .top-notifications-list li div:nth-child(2) {
+            font-size: 13px;
+            color: #555;
+            line-height: 1.6;
+        }
+
         .top-notifications-list li small {
             display: block;
+            font-size: 11px;
+            color: #b0b8c1;
             margin-top: 6px;
-            color: #7f8c8d;
-            font-weight: normal;
+        }
+
+        .top-notifications-empty,
+        .top-notifications-list li.top-notifications-empty {
+            padding: 50px 20px !important;
+            text-align: center;
+            color: #b0b8c1 !important;
+            font-size: 14px !important;
+            font-weight: 400 !important;
+            border-right: none !important;
+            background: white !important;
+        }
+
+        /* ======= Main Layout ======= */
+        .main-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 90px 20px 20px 20px;
         }
 
         body.has-top-bar .main-container {
             padding-top: 120px;
         }
-        body.has-top-bar .top-notifications-panel {
-            top: 95px;
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            background: rgba(255, 255, 255, 0.95);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            position: relative;
+            overflow: visible;
+        }
+
+        .header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #698163, #5a6f56, #698163);
+            background-size: 200% 100%;
+            animation: shimmer 3s ease-in-out infinite;
+        }
+
+        @keyframes shimmer {
+
+            0%,
+            100% {
+                background-position: -200% 0;
+            }
+
+            50% {
+                background-position: 200% 0;
+            }
+        }
+
+        .main-title {
+            font-size: 42px;
+            font-weight: bold;
+            color: #698163;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.1);
+        }
+
+        .subtitle {
+            font-size: 20px;
+            color: #666;
+            margin-bottom: 30px;
+            font-weight: 500;
+            opacity: 0.8;
+        }
+
+        /* ======= Navigation ======= */
+        .navigation {
+            display: flex;
+            justify-content: center;
+            gap: 25px;
+            margin-bottom: 30px;
+            flex-wrap: wrap;
+        }
+
+        .nav-btn {
+            background: linear-gradient(135deg, #698163, #5a6f56);
+            color: white;
+            border: none;
+            padding: 18px 35px;
+            border-radius: 15px;
+            cursor: pointer;
+            font-family: inherit;
+            font-size: 16px;
+            font-weight: bold;
+            text-decoration: none;
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 0 8px 25px rgba(105, 129, 99, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .nav-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .nav-btn:hover::before {
+            left: 100%;
+        }
+
+        .nav-btn:hover {
+            background: linear-gradient(135deg, #5a6f56, #4a5a47);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(105, 129, 99, 0.4), 0 0 0 1px rgba(255, 255, 255, 0.2);
+        }
+
+        .nav-btn.active {
+            background: linear-gradient(135deg, #2c3e50, #34495e);
+            transform: translateY(-3px) scale(1.02);
+            box-shadow: 0 15px 35px rgba(44, 62, 80, 0.4);
+        }
+
+        .logout-btn {
+            background: linear-gradient(135deg, #e74c3c, #c0392b) !important;
+        }
+
+        .logout-btn:hover {
+            background: linear-gradient(135deg, #c0392b, #a93226) !important;
+        }
+
+        /* ======= App Container ======= */
+        .app-container {
+            background: rgba(255, 255, 255, 0.98);
+            border-radius: 20px;
+            box-shadow: 0 25px 70px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            overflow: hidden;
+            min-height: 600px;
+            position: relative;
+            z-index: 10;
+        }
+
+        .app-content {
+            display: none;
+            padding: 40px;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .app-content.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* ======= Welcome Screen ======= */
+        .welcome-screen {
+            text-align: center;
+            padding: 80px 20px;
+            color: #698163;
+        }
+
+        .welcome-screen h2 {
+            font-size: 32px;
+            margin-bottom: 20px;
+            font-weight: 700;
+            position: relative;
+        }
+
+        .welcome-screen h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, #698163, #5a6f56);
+            border-radius: 2px;
+        }
+
+        .welcome-screen p {
+            font-size: 18px;
+            line-height: 1.6;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+
+        .app-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 35px;
+            margin-top: 40px;
+        }
+
+        .app-card {
+            background: linear-gradient(135deg, #698163, #5a6f56);
+            color: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 15px 40px rgba(105, 129, 99, 0.3), 0 0 0 1px rgba(255, 255, 255, 0.1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .app-card::before {
+            content: '';
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity .3s;
+        }
+
+        .app-card:hover::before {
+            opacity: 1;
+        }
+
+        .app-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 0 25px 60px rgba(105, 129, 99, 0.4);
+        }
+
+        .app-card h3 {
+            font-size: 28px;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+
+        .app-card p {
+            font-size: 16px;
+            line-height: 1.5;
+            opacity: 0.9;
+        }
+
+        .app-icon {
+            font-size: 64px;
+            margin-bottom: 25px;
+            display: block;
+            filter: drop-shadow(0 4px 8px rgba(0, 0, 0, 0.2));
+        }
+
+        /* ======= Tracking Section ======= */
+        .tracking-container {
+            padding: 20px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .filter-section {
+            background: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            margin-bottom: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            min-width: 200px;
+        }
+
+        .filter-group label {
+            font-weight: bold;
+            color: #698163;
+            font-size: 14px;
+        }
+
+        .filter-group select,
+        .filter-group input {
+            padding: 10px 15px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
+            font-size: 14px;
+            transition: border-color 0.3s ease;
+        }
+
+        .filter-group select:focus,
+        .filter-group input:focus {
+            outline: none;
+            border-color: #698163;
+        }
+
+        .requests-table-container {
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .requests-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .requests-table th {
+            background: linear-gradient(135deg, #698163, #5a6f56);
+            color: white;
+            padding: 15px 10px;
+            text-align: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        .requests-table td {
+            padding: 12px 10px;
+            text-align: center;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 13px;
+        }
+
+        .requests-table tr:hover {
+            background: rgba(105, 129, 99, 0.05);
+        }
+
+        .status-badge {
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        .status-pending {
+            background: #fff3cd;
+            color: #856404;
+        }
+
+        .status-approved {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .status-rejected {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .status-completed {
+            background: #d1ecf1;
+            color: #0c5460;
+        }
+
+        .action-btn {
+            background: linear-gradient(135deg, #698163, #5a6f56);
+            color: white;
+            border: none;
+            padding: 6px 12px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            margin: 0 2px;
+            transition: all 0.3s ease;
+        }
+
+        .action-btn:hover {
+            background: linear-gradient(135deg, #5a6f56, #4a5a47);
+            transform: translateY(-1px);
+        }
+
+        /* ======= Notification Toast ======= */
+        .notification {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: linear-gradient(135deg, #27ae60, #2ecc71);
+            color: #fff;
+            padding: 15px 25px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(39, 174, 96, 0.3);
+            transform: translateX(400px);
+            transition: transform 0.3s ease-out;
+            z-index: 1000;
+        }
+
+        .notification.show {
+            transform: translateX(0);
+        }
+
+        .notification.error {
+            background: linear-gradient(135deg, #e74c3c, #c0392b);
+            box-shadow: 0 10px 30px rgba(231, 76, 60, 0.3);
+        }
+
+        /* ======= Loading Spinner ======= */
+        .loading-spinner {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+            margin-left: 10px;
+        }
+
+        @keyframes spin {
+            to {
+                transform: rotate(360deg);
+            }
+        }
+
+        /* ======= Modal ======= */
+        .modal {
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: #fefefe;
+            padding: 0;
+            border: none;
+            width: 90%;
+            max-width: 800px;
+            max-height: 90vh;
+            border-radius: 10px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            overflow: hidden;
+        }
+
+        .modal-header {
+            background: linear-gradient(135deg, #698163 0%, #5a6f56 100%);
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h2 {
+            margin: 0;
+            font-size: 24px;
+        }
+
+        .close {
+            color: white;
+            font-size: 28px;
+            font-weight: bold;
+            cursor: pointer;
+            line-height: 1;
+        }
+
+        .close:hover {
+            opacity: 0.7;
+        }
+
+        .modal-body {
+            padding: 20px;
+            max-height: 60vh;
+            overflow-y: auto;
+        }
+
+        .modal-footer {
+            padding: 20px;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        .detail-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .detail-item {
+            display: flex;
+            flex-direction: column;
+            padding: 10px;
+            background-color: #f8f9fa;
+            border-radius: 5px;
+        }
+
+        .detail-label {
+            font-weight: bold;
+            color: #698163;
+            margin-bottom: 5px;
+        }
+
+        .detail-value {
+            color: #333;
+        }
+
+        .items-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        .items-table th,
+        .items-table td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: center;
+        }
+
+        .items-table th {
+            background-color: #698163;
+            color: white;
+        }
+
+        .items-table tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .btn-primary {
+            background-color: #698163;
+            color: white;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn:hover {
+            opacity: 0.8;
+        }
+
+        /* ======= Responsive ======= */
+        @media (max-width: 768px) {
+            .navigation {
+                flex-direction: column;
+                align-items: center;
+                gap: 15px;
+            }
+
+            .nav-btn {
+                width: 250px;
+                padding: 15px 25px;
+            }
+
+            .main-title {
+                font-size: 36px;
+            }
+
+            .app-cards {
+                grid-template-columns: 1fr;
+                gap: 25px;
+            }
+
+            .header {
+                padding: 30px 20px;
+            }
+
+            .app-content {
+                padding: 30px 20px;
+            }
+
+            .welcome-screen {
+                padding: 60px 15px;
+            }
+
+            .welcome-screen h2 {
+                font-size: 28px;
+            }
+
+            .welcome-screen p {
+                font-size: 18px;
+            }
+
+            .top-bar {
+                padding: 0 15px;
+                height: 60px;
+            }
+
+            .top-request-btn {
+                display: none;
+            }
+
+            .top-notifications-panel {
+                left: 15px;
+                right: auto;
+                width: calc(100% - 30px);
+                top: 80px;
+            }
+
+            .main-container {
+                padding: 80px 15px 15px 15px;
+            }
+
+            .filter-section {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .filter-group {
+                min-width: auto;
+            }
+
+            .requests-table {
+                font-size: 12px;
+            }
+
+            .requests-table th,
+            .requests-table td {
+                padding: 8px 5px;
+            }
+
+            .dropdown-menu {
+                width: 280px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .main-container {
+                padding: 15px;
+            }
+
+            .main-title {
+                font-size: 28px;
+            }
+
+            .subtitle {
+                font-size: 16px;
+            }
+
+            .nav-btn {
+                width: 200px;
+                font-size: 14px;
+            }
+        }
+
+        /* ======= Print ======= */
+        @media print {
+
+            .top-bar,
+            .navigation,
+            .nav-btn,
+            .user-dropdown,
+            .logout-btn,
+            .filter-section,
+            .sidebar-overlay,
+            .dropdown-menu,
+            .notification,
+            .modal-footer {
+                display: none !important;
+            }
+
+            .modal {
+                position: static !important;
+                width: 100% !important;
+                height: auto !important;
+                background: transparent !important;
+            }
+
+            .modal-content {
+                width: 100% !important;
+                max-width: none !important;
+                box-shadow: none !important;
+                border: none !important;
+            }
+
+            .modal-header {
+                background: #698163 !important;
+                -webkit-print-color-adjust: exact;
+                color-adjust: exact;
+            }
         }
     </style>
+    <link rel="stylesheet" href="./css/toast.css">
 </head>
+
 <body>
     <!-- Top Bar -->
     <div class="top-bar" id="topBar" style="display: none;">
-        <div class="top-bar-content">
-            <div class="top-bar-brand" title="صرح القابضة">
-                <img src="./img/logo-ar.png" alt="صرح القابضة">
-                <div class="top-bar-brand-text">
-                    <span class="brand-main">صرح القابضة</span>
-                    <span class="brand-sub">Sarh Holding</span>
-                </div>
-            </div>
-            <span class="top-bar-title">نظام إدارة المشتريات</span>
-        </div>
-        <div class="top-bar-actions">
-            <button class="top-request-btn" type="button" onclick="window.location.href='./purchase_request.html'">
-                طلب جديد
-            </button>
-            <button class="top-notification-btn" type="button" id="topNotificationsBtn">
-                🔔
-                <span class="top-notification-badge" id="topNotificationsBadge" style="display: none;">0</span>
-            </button>
+        <div class="top-bar-actions" style="width:100%;display:flex;justify-content:space-between;align-items:center;">
+            <!-- قائمة المستخدم -->
             <div class="user-dropdown" id="userDropdown">
                 <button class="user-menu-btn" onclick="toggleUserMenu()" title="فتح القائمة">
                     <img src="./img/logo-ar.png" alt="القائمة">
@@ -815,48 +1121,62 @@
                         <div class="dropdown-user-role" id="dropdownUserRole">موظف</div>
                     </div>
                     <button class="dropdown-item" onclick="showNotification('قريباً: إعدادات الملف الشخصي', 'info')">
-                        <span class="dropdown-icon">👤</span>
-                        الملف الشخصي
+                        <span class="dropdown-icon">👤</span> الملف الشخصي
                     </button>
                     <button class="dropdown-item" onclick="showNotification('قريباً: الإعدادات', 'info')">
-                        <span class="dropdown-icon">⚙️</span>
-                        الإعدادات
+                        <span class="dropdown-icon">⚙️</span> الإعدادات
                     </button>
                     <button class="dropdown-item logout" onclick="logout()">
-                        <span class="dropdown-icon">🚪</span>
-                        تسجيل الخروج
+                        <span class="dropdown-icon">🚪</span> تسجيل الخروج
                     </button>
                 </div>
             </div>
+
+            <!-- أزرار الإجراءات -->
+            <div style="display:flex;gap:15px;align-items:center;">
+                <button class="top-request-btn" type="button" onclick="window.location.href='./purchase_request.html'">
+                    طلب جديد
+                </button>
+                <button class="top-notification-btn" type="button" id="topNotificationsBtn"
+                    onclick="toggleTopNotificationsPanel()">
+                    🔔
+                    <span class="top-notification-badge" id="topNotificationsBadge" style="display:none;">0</span>
+                </button>
+            </div>
         </div>
     </div>
-    <div class="top-notifications-panel" id="topNotificationsPanel" style="display: none;">
+
+    <!-- Notifications Panel -->
+    <div class="top-notifications-panel" id="topNotificationsPanel">
         <div class="top-notifications-header">
             <span>إشعاراتي</span>
             <button type="button" id="markTopNotificationsRead">تعليم الكل كمقروء</button>
         </div>
         <ul class="top-notifications-list" id="topNotificationsList"></ul>
     </div>
-    
+
+    <!-- Main Container -->
     <div class="main-container">
         <div class="header">
             <h1 class="main-title">نظام إدارة المشتريات</h1>
             <p class="subtitle">إدارة شاملة ومتطورة لطلبات وأوامر الشراء</p>
-            
+
             <div class="navigation">
                 <a class="nav-btn" href="./purchase_request.html">📄طلب شراء</a>
                 <a class="nav-btn" href="./login.html" id="loginLink">🔐 تسجيل الدخول</a>
-                <button class="nav-btn logout-btn" onclick="logout()" id="logoutBtn" style="display: none;">🚪 تسجيل الخروج</button>
+                <button class="nav-btn logout-btn" onclick="logout()" id="logoutBtn" style="display:none;">🚪 تسجيل
+                    الخروج</button>
             </div>
         </div>
-        
+
         <div class="app-container">
             <!-- Home Screen -->
             <div id="home" class="app-content active">
                 <div class="welcome-screen">
                     <h2>مرحباً بك في نظام إدارة المشتريات في صرح القابضة</h2>
-                    <p>نظام متكامل لإدارة جميع عمليات الشراء في مؤسستك. يمكنك إنشاء طلبات الشراء وأوامر الشراء بسهولة.</p>
-                    
+                    <p>نظام متكامل لإدارة جميع عمليات الشراء في مؤسستك. يمكنك إنشاء طلبات الشراء وأوامر الشراء بسهولة.
+                    </p>
+
                     <div class="app-cards">
                         <div class="app-card" onclick="window.location.href='./purchase_request.html'">
                             <span class="app-icon">📋</span>
@@ -871,23 +1191,24 @@
                     </div>
                 </div>
             </div>
-            
+
             <!-- Purchase Request Placeholder -->
             <div id="purchase-request" class="app-content">
-  <div class="placeholder-content">
-    <h2>📋 تطبيق طلب الشراء</h2>
-    <p>هنا سيتم إدراج كود تطبيق طلب الشراء</p>
+                <div style="text-align:center;padding:100px 20px;color:#698163;">
+                    <h2>📋 تطبيق طلب الشراء</h2>
+                    <p>هنا سيتم إدراج كود تطبيق طلب الشراء</p>
+                    <a class="nav-btn" href="./purchase_request.html" style="margin-top:20px;display:inline-block;">
+                        فتح نموذج طلب الشراء
+                    </a>
+                </div>
+            </div>
 
-    <a class="nav-btn" href="./purchase_request.html" style="margin-top:20px; display:inline-block;">
-      فتح نموذج طلب الشراء
-    </a>
-  </div>
-</div>
+            <!-- Track Requests -->
             <div id="track-request" class="app-content">
                 <div class="tracking-container">
                     <h2>🔍 متابعة طلباتي</h2>
                     <p>متابعة حالة طلبات الشراء الخاصة بك ومراحل الموافقة</p>
-                    
+
                     <div class="filter-section">
                         <div class="filter-group">
                             <label>حالة الطلب:</label>
@@ -901,13 +1222,14 @@
                         </div>
                         <div class="filter-group">
                             <label>رقم الطلب:</label>
-                            <input type="text" id="orderNumberFilter" placeholder="ابحث برقم الطلب..." onkeyup="filterRequests()">
+                            <input type="text" id="orderNumberFilter" placeholder="ابحث برقم الطلب..."
+                                onkeyup="filterRequests()">
                         </div>
-                        <button class="nav-btn" onclick="loadRequests()" style="margin-top: 10px;">
+                        <button class="nav-btn" onclick="loadRequests()" style="margin-top:10px;">
                             🔄 تحديث القائمة
                         </button>
                     </div>
-                    
+
                     <div class="requests-table-container">
                         <table class="requests-table" id="requestsTable">
                             <thead>
@@ -923,1002 +1245,39 @@
                             </thead>
                             <tbody id="requestsTableBody">
                                 <tr>
-                                    <td colspan="7" style="text-align: center; padding: 40px; color: #666;">
+                                    <td colspan="7" style="text-align:center;padding:40px;color:#666;">
                                         جاري تحميل الطلبات...
                                     </td>
                                 </tr>
                             </tbody>
                         </table>
                     </div>
-  </div>
-</div>
-            
+                </div>
+            </div>
         </div>
-        
     </div>
 
     <div id="notification" class="notification"></div>
 
-    <script>
-        // حماية الواجهة حسب الدور
-        document.addEventListener('DOMContentLoaded', function() {
-            checkAuth();
-            enforceRoleAccess('requester');
-        });
-
-        function checkAuth() {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            const logoutBtn = document.getElementById('logoutBtn');
-            const loginLink = document.getElementById('loginLink');
-            const userDropdown = document.getElementById('userDropdown');
-            const topBar = document.getElementById('topBar');
-            
-            if (token && user.role) {
-                if (topBar) topBar.style.display = 'flex';
-                if (logoutBtn) logoutBtn.style.display = 'none';
-                if (loginLink) loginLink.style.display = 'none';
-                document.body.classList.add('has-top-bar');
-                updateUserInfo(user);
-                initTopNotifications();
-            } else {
-                if (topBar) topBar.style.display = 'none';
-                if (logoutBtn) logoutBtn.style.display = 'none';
-                if (loginLink) loginLink.style.display = 'inline-block';
-                document.body.classList.remove('has-top-bar');
-                teardownTopNotifications();
-            }
-        }
-
-        function updateUserInfo(user) {
-            const roleNames = { requester: 'موظف طلبات', manager: 'مدير', finance: 'موظف مالية', disbursement: 'موظف صرف', admin: 'مدير النظام', procurement: 'موظف مشتريات' };
-            const userName = user.full_name || user.name || user.username || 'مستخدم';
-            const userRole = roleNames[user.role] || 'موظف';
-            const hn = document.getElementById('headerUserName');
-            const hr = document.getElementById('headerUserRole');
-            const dn = document.getElementById('dropdownUserName');
-            const dr = document.getElementById('dropdownUserRole');
-            if (hn) hn.textContent = userName;
-            if (hr) hr.textContent = userRole;
-            if (dn) dn.textContent = userName;
-            if (dr) dr.textContent = userRole;
-        }
-
-        function toggleUserMenu() {
-            const dropdown = document.getElementById('userDropdown');
-            if (dropdown) dropdown.classList.toggle('open');
-        }
-
-        // إغلاق الشريط الجانبي عند النقر على العناصر
-        document.addEventListener('click', function(event) {
-            const dropdown = document.getElementById('userDropdown');
-            if (!dropdown) return;
-            
-            // إغلاق الشريط الجانبي عند النقر على العناصر الداخلية
-            if (dropdown.classList.contains('open') && 
-                !dropdown.querySelector('.user-menu-btn').contains(event.target) &&
-                !dropdown.querySelector('.dropdown-menu').contains(event.target)) {
-                dropdown.classList.remove('open');
-            }
-        });
-
-        function showNotification(message, type = 'success') {
-            const n = document.getElementById('notification');
-            if (!n) return;
-            n.textContent = message;
-            n.className = `notification ${type}`;
-            n.classList.add('show');
-            setTimeout(() => n.classList.remove('show'), 3000);
-        }
-
-        function showCustomConfirm(message, onConfirm) {
-            const modal = document.createElement('div');
-            modal.style.cssText = 'position:fixed;inset:0;background:rgba(0,0,0,0.5);display:flex;justify-content:center;align-items:center;z-index:10000;backdrop-filter:blur(5px)';
-            const content = document.createElement('div');
-            content.style.cssText = 'background:#fff;padding:30px;border-radius:15px;text-align:center;box-shadow:0 20px 60px rgba(0,0,0,0.3);max-width:400px;margin:20px;';
-            content.innerHTML = '<h3 style="margin-bottom:20px;color:#698163;font-size:24px;">'+message+'</h3>\
-            <div style="display:flex;gap:15px;justify-content:center;">\
-            <button id="confirmBtn" style="background:linear-gradient(135deg,#e74c3c,#c0392b);color:#fff;border:none;padding:12px 25px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:bold;">نعم، تسجيل الخروج</button>\
-            <button id="cancelBtn" style="background:linear-gradient(135deg,#95a5a6,#7f8c8d);color:#fff;border:none;padding:12px 25px;border-radius:8px;cursor:pointer;font-size:16px;font-weight:bold;">إلغاء</button></div>';
-            modal.appendChild(content);
-            document.body.appendChild(modal);
-            document.getElementById('confirmBtn').onclick = () => { document.body.removeChild(modal); onConfirm && onConfirm(); };
-            document.getElementById('cancelBtn').onclick = () => document.body.removeChild(modal);
-            modal.onclick = (e) => { if (e.target === modal) document.body.removeChild(modal); };
-        }
-
-        function logout() {
-            showCustomConfirm('هل أنت متأكد من تسجيل الخروج؟', function() {
-                const logoutBtn = document.getElementById('logoutBtn');
-                if (logoutBtn) {
-                    const original = logoutBtn.innerHTML;
-                    logoutBtn.innerHTML = '🚪 جاري تسجيل الخروج... <span class="loading-spinner"></span>';
-                    logoutBtn.disabled = true;
-                }
-                teardownTopNotifications();
-                setTimeout(() => {
-                    localStorage.removeItem('token');
-                    localStorage.removeItem('user');
-                    showNotification('تم تسجيل الخروج بنجاح', 'success');
-                    setTimeout(() => window.location.reload(), 1500);
-                }, 1000);
-            });
-        }
-
-        document.body.style.opacity = '0';
-        document.body.style.transition = 'opacity 0.5s ease-out';
-        setTimeout(() => { document.body.style.opacity = '1'; }, 100);
-
-        // نظام متابعة سير العملية
-        // استخدام المسار النسبي للـ API عبر Nginx
-        const API_BASE = '/api';
-        let allRequests = [];
-        let topNotifications = [];
-        let topNotificationsIntervalId = null;
-        let topNotificationsInitialized = false;
-        let topNotificationsOutsideClickRegistered = false;
-        
-        function loadRequests() {
-            const token = localStorage.getItem('token');
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            
-            if (!token || !user.id) {
-                showNotification('يجب تسجيل الدخول أولاً', 'error');
-                return;
-            }
-            
-            // التحقق من أن المستخدم لديه صلاحية الوصول للطلبات
-            console.log('User role:', user.role);
-            
-            // دعم جميع الأدوار مؤقتاً للتطوير
-            if (user.role && !['requester', 'admin', 'manager', 'finance', 'disbursement'].includes(user.role)) {
-                showNotification('دورك: ' + user.role + ' - سيتم دعمه قريباً', 'warning');
-            }
-            
-            const tbody = document.getElementById('requestsTableBody');
-            tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #666;">جاري تحميل طلباتك...</td></tr>';
-            
-            // جلب طلبات المستخدم الحالي فقط
-            console.log('Fetching from:', `${API_BASE}/user/requests`);
-            console.log('User:', user);
-            console.log('Token:', token ? 'Present' : 'Missing');
-            
-            fetch(`${API_BASE}/user/requests`, {
-                method: 'GET',
-                headers: {
-                    'Authorization': `Bearer ${token}`,
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                console.log('Response status:', response.status);
-                console.log('Response headers:', response.headers);
-                
-                if (response.status === 401) {
-                    showNotification('انتهت صلاحية الجلسة. يرجى تسجيل الدخول مرة أخرى', 'error');
-                localStorage.removeItem('token');
-                localStorage.removeItem('user');
-                    window.location.href = 'login.html';
-                    return;
-                }
-                if (!response.ok) {
-                    throw new Error(`HTTP error! status: ${response.status}`);
-                }
-                
-                // التحقق من أن الاستجابة JSON صالحة
-                const contentType = response.headers.get('content-type');
-                if (!contentType || !contentType.includes('application/json')) {
-                    throw new Error('Response is not JSON');
-                }
-                
-                return response.json();
-            })
-            .then(data => {
-                allRequests = data || [];
-                displayRequests(allRequests);
-                showNotification(`تم تحميل ${allRequests.length} من طلباتك`, 'success');
-            })
-            .catch(error => {
-                console.error('Error loading requests:', error);
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #e74c3c;">خطأ في تحميل طلباتك: ' + error.message + '</td></tr>';
-                showNotification('خطأ في تحميل طلباتك: ' + error.message, 'error');
-            });
-        }
-        
-        function displayRequests(requests) {
-            const tbody = document.getElementById('requestsTableBody');
-            
-            if (requests.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="7" style="text-align: center; padding: 40px; color: #666;">لا توجد طلبات لك بعد</td></tr>';
-                return;
-            }
-            
-            tbody.innerHTML = requests.map(request => {
-                const statusClass = getStatusClass(request.status);
-                const statusText = getStatusText(request.status);
-                
-                // تنسيق التاريخ الميلادي حسب تاريخ الطلب الفعلي
-                let createdDate = 'غير محدد';
-                if (request.created_at) {
-                    const date = new Date(request.created_at);
-                    createdDate = date.toLocaleDateString('en-GB', {
-                        year: 'numeric',
-                        month: '2-digit',
-                        day: '2-digit'
-                    });
-                }
-                
-                // تحديد العملة حسب الطلب المرسل
-                const currency = request.currency || 'SYP';
-                let currencySymbol = 'ل.س';
-                let currencyText = 'سوري';
-                
-                if (currency === 'USD' || currency === 'دولار') {
-                    currencySymbol = '$';
-                    currencyText = 'دولار';
-                } else if (currency === 'SYP' || currency === 'سوري') {
-                    currencySymbol = 'ل.س';
-                    currencyText = 'سوري';
-                }
-                
-                return `
-                    <tr>
-                        <td>${request.order_number || 'غير محدد'}</td>
-                        <td>${request.requester || 'غير محدد'}</td>
-                        <td>${request.department || 'غير محدد'}</td>
-                        <td>${createdDate}</td>
-                        <td>${request.total_amount ? `${request.total_amount} ${currencySymbol}` : 'غير محدد'}</td>
-                        <td><span class="status-badge ${statusClass}">${statusText}</span></td>
-                        <td>
-                            <button class="action-btn" onclick="viewRequest(${request.id})">عرض</button>
-                            <button class="action-btn" onclick="printRequest(${request.id})">طباعة</button>
-                        </td>
-                    </tr>
-                `;
-            }).join('');
-        }
-        
-        function getStatusClass(status) {
-            switch(status) {
-                case 'pending': return 'status-pending';
-                case 'approved': return 'status-approved';
-                case 'rejected': return 'status-rejected';
-                case 'completed': return 'status-completed';
-                default: return 'status-pending';
-            }
-        }
-        
-        function getStatusText(status) {
-            switch(status) {
-                case 'pending': return 'في الانتظار';
-                case 'approved': return 'موافق عليه';
-                case 'rejected': return 'مرفوض';
-                case 'completed': return 'مكتمل';
-                default: return 'في الانتظار';
-            }
-        }
-        
-        function filterRequests() {
-            const statusFilter = document.getElementById('statusFilter').value;
-            const orderNumberFilter = document.getElementById('orderNumberFilter').value.toLowerCase();
-            
-            let filteredRequests = allRequests;
-            
-            if (statusFilter) {
-                filteredRequests = filteredRequests.filter(request => request.status === statusFilter);
-            }
-            
-            if (orderNumberFilter) {
-                filteredRequests = filteredRequests.filter(request => 
-                    (request.order_number || '').toLowerCase().includes(orderNumberFilter)
-                );
-            }
-            
-            displayRequests(filteredRequests);
-        }
-        
-        let currentRequestForModal = null;
-        
-        function formatCurrency(amount, currency) {
-            if (!amount) return 'غير محدد';
-            
-            let currencySymbol = 'ل.س';
-            if (currency === 'USD') {
-                currencySymbol = '$';
-            } else if (currency === 'EUR') {
-                currencySymbol = '€';
-            }
-            
-            return `${amount} ${currencySymbol}`;
-        }
-        
-        async function viewRequest(requestId) {
-            try {
-                // جلب تفاصيل الطلب من الخادم دائماً للحصول على approval_data
-                const response = await fetch(`${API_BASE}/requests/${requestId}`, {
-                    headers: {
-                        'Authorization': `Bearer ${localStorage.getItem('token')}`
-                    }
-                });
-                
-                let request;
-                if (response.ok) {
-                    request = await response.json();
-                } else {
-                    showNotification('فشل في جلب تفاصيل الطلب', 'error');
-                    return;
-                }
-                
-                // استخدام البيانات الفعلية من قاعدة البيانات فقط
-                
-                currentRequestForModal = request;
-                showRequestModal(request);
-                
-            } catch (error) {
-                console.error('خطأ في جلب تفاصيل الطلب:', error);
-                showNotification('حدث خطأ في جلب تفاصيل الطلب', 'error');
-            }
-        }
-        
-        function showRequestModal(request) {
-            const modal = document.getElementById('requestModal');
-            const modalBody = document.getElementById('modalBody');
-            
-            const formattedTotal = formatCurrency(request.total_amount, request.currency);
-            const createdDate = request.created_at ? new Date(request.created_at).toLocaleDateString('en-US') : 
-                              (request.date ? new Date(request.date).toLocaleDateString('en-US') : 'غير محدد');
-            
-            // بناء جدول الأصناف
-            let itemsTable = '';
-            if (request.items && request.items.length > 0) {
-                itemsTable = `
-                    <h3>الأصناف المطلوبة</h3>
-                    <table class="items-table">
-                        <thead>
-                            <tr>
-                                <th>اسم الصنف</th>
-                                <th>الوحدة</th>
-                                <th>الكمية</th>
-                                <th>السعر</th>
-                                <th>المجموع</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            ${request.items.map(item => `
-                                <tr>
-                                    <td>${item.item_name || item.name || 'غير محدد'}</td>
-                                    <td>${item.unit || 'غير محدد'}</td>
-                                    <td>${item.quantity || 0}</td>
-                                    <td>${item.price || 0}</td>
-                                    <td>${item.total || ((item.quantity || 0) * (item.price || 0))}</td>
-                                </tr>
-                                ${item.specification ? `<tr><td colspan="5" style="font-style: italic; color: #666;">المواصفات: ${item.specification}</td></tr>` : ''}
-                            `).join('')}
-                        </tbody>
-                    </table>
-                `;
-            }
-            
-            modalBody.innerHTML = `
-                <div class="detail-grid">
-                    <div class="detail-item">
-                        <span class="detail-label">رقم الطلب</span>
-                        <span class="detail-value">${request.order_number || request.id}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">مقدم الطلب</span>
-                        <span class="detail-value">${request.requester || 'غير محدد'}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">القسم</span>
-                        <span class="detail-value">${request.department || 'غير محدد'}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">تاريخ الطلب</span>
-                        <span class="detail-value">${createdDate}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">موعد التسليم</span>
-                        <span class="detail-value">${request.delivery_date || 'غير محدد'}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">عنوان التسليم</span>
-                        <span class="detail-value">${request.delivery_address || 'غير محدد'}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">كود المشروع</span>
-                        <span class="detail-value">${request.project_code || 'غير محدد'}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">العملة</span>
-                        <span class="detail-value">${request.currency || 'ل.س'}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">المبلغ الإجمالي</span>
-                        <span class="detail-value">${formattedTotal}</span>
-                    </div>
-                    <div class="detail-item">
-                        <span class="detail-label">الحالة</span>
-                        <span class="detail-value">${getStatusText(request.status)}</span>
-                    </div>
-                </div>
-                ${itemsTable}
-            `;
-            
-            modal.style.display = 'flex';
-        }
-        
-        function closeRequestModal() {
-            document.getElementById('requestModal').style.display = 'none';
-            currentRequestForModal = null;
-        }
-        
-        function printCurrentRequest() {
-            if (currentRequestForModal) {
-                // إنشاء صفحة طباعة بنفس تنسيق purchase_request.html
-                const printWindow = window.open('', '_blank');
-                const request = currentRequestForModal;
-                
-                // بناء جدول الأصناف
-                let itemsTable = '';
-                if (request.items && request.items.length > 0) {
-                    itemsTable = request.items.map(item => `
-                        <tr>
-                            <td>${item.item_name || item.name || ''}</td>
-                            <td>${item.unit || ''}</td>
-                            <td>${item.quantity || 0}</td>
-                            <td>${item.price || 0}</td>
-                            <td>${item.total || ((item.quantity || 0) * (item.price || 0))}</td>
-                        </tr>
-                        ${item.specification ? `<tr><td colspan="5" style="font-style: italic; color: #666; padding: 5px;">المواصفات: ${item.specification}</td></tr>` : ''}
-                    `).join('');
-                }
-                
-                // بناء جدول الموافقات - نستخدم البيانات المحفوظة أو نتركها فارغة
-                const approval = request.approval_data || {};
-                console.log('🔍 approval data for print:', approval);
-                let approvalTable = `
-                     <tr>
-                         <td class="approval-label">الاسم</td>
-                         <td><input type="text" class="approval-input" value="${approval.requester_name || request.requester || ''}" readonly></td>
-                         <td><input type="text" class="approval-input" value="${approval.manager_name || ''}" readonly></td>
-                         <td><input type="text" class="approval-input" value="${approval.finance_name || ''}" readonly></td>
-                         <td><input type="text" class="approval-input" value="${approval.disbursement_name || ''}" readonly></td>
-                     </tr>
-                     <tr>
-                         <td class="approval-label">المنصب</td>
-                         <td><input type="text" class="approval-input" value="${approval.requester_position || ''}" readonly></td>
-                         <td><input type="text" class="approval-input" value="${approval.manager_position || ''}" readonly></td>
-                         <td><input type="text" class="approval-input" value="${approval.finance_position || ''}" readonly></td>
-                         <td><input type="text" class="approval-input" value="${approval.disbursement_position || ''}" readonly></td>
-                     </tr>
-                    <tr>
-                        <td class="approval-label">التاريخ</td>
-                        <td><input type="text" class="approval-input" value="${approval.requester_date || request.date || (request.created_at ? new Date(request.created_at).toLocaleDateString('en-US') : '')}" readonly></td>
-                        <td><input type="text" class="approval-input" value="${approval.manager_date || request.date || (request.created_at ? new Date(request.created_at).toLocaleDateString('en-US') : '')}" readonly></td>
-                        <td><input type="text" class="approval-input" value="${approval.finance_date || request.date || (request.created_at ? new Date(request.created_at).toLocaleDateString('en-US') : '')}" readonly></td>
-                        <td><input type="text" class="approval-input" value="${approval.disbursement_date || request.date || (request.created_at ? new Date(request.created_at).toLocaleDateString('en-US') : '')}" readonly></td>
-                    </tr>
-                    <tr class="signature-row">
-                        <td class="approval-label">التوقيع</td>
-                        <td class="signature-cell"></td>
-                        <td class="signature-cell"></td>
-                        <td class="signature-cell"></td>
-                        <td class="signature-cell"></td>
-                    </tr>
-                `;
-                
-                const printContent = `
-<!DOCTYPE html>
-<html lang="ar" dir="rtl">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>طلب شراء</title>
-    <link rel="stylesheet" href="./css/fonts.css">
-    <link rel="stylesheet" href="./css/style.css" />
-</head>
-<body>
-    <div class="document-container">
-        <div>
-            <div class="sarh">صرح القابضة</div>
-            <div class="sarh">Sarh Holding</div>
-        </div>
-        <div class="main-title">طلب شراء - Purchase Request</div>
-
-        <div class="header">
-            <div class="supplier-info">
-                <div class="info-row">
-                    <span class="info-label">مقدم الطلب:</span>
-                    <input type="text" class="info-input" value="${request.requester || ''}" readonly>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">القسم الطالب:</span>
-                    <input type="text" class="info-input" value="${request.department || ''}" readonly>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">عنوان التسليم:</span>
-                    <input type="text" class="info-input" value="${request.delivery_address || ''}" readonly>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">موعد التسليم:</span>
-                    <input type="date" class="info-input" value="${request.delivery_date || ''}" readonly>
-                </div>
-            </div>
-
-            <div class="company-info">
-                <div class="info-row">
-                    <span class="info-label">تاريخ طلب الشراء:</span>
-                    <input type="date" class="info-input" value="${request.date || (request.created_at ? new Date(request.created_at).toISOString().split('T')[0] : '')}" readonly>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">رمز طلب الشراء:</span>
-                    <input type="text" class="info-input" value="${request.order_number || request.id}" readonly>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">كود المشروع:</span>
-                    <input type="text" class="info-input" value="${request.project_code || ''}" readonly>
-                </div>
-                <div class="info-row">
-                    <span class="info-label">العملة:</span>
-                    <select class="currency-select" readonly>
-                        <option value="SYP" ${request.currency === 'SYP' ? 'selected' : ''}>ليرة سورية</option>
-                        <option value="USD" ${request.currency === 'USD' ? 'selected' : ''}>دولار أمريكي</option>
-                        <option value="EUR" ${request.currency === 'EUR' ? 'selected' : ''}>يورو</option>
-                    </select>
-                </div>
-            </div>
-        </div>
-
-        <div class="table-section">
-            <div class="section-title">الأصناف المطلوبة</div>
-            <table class="items-table">
-                <thead>
-                    <tr>
-                        <th>اسم الصنف</th>
-                        <th>الوحدة</th>
-                        <th>الكمية</th>
-                        <th>السعر</th>
-                        <th>المجموع</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${itemsTable}
-                </tbody>
-                <tfoot>
-                    <tr>
-                        <td colspan="4" class="total-label">المجموع الإجمالي:</td>
-                        <td class="total-amount">${formatCurrency(request.total_amount, request.currency)}</td>
-                    </tr>
-                </tfoot>
-            </table>
-        </div>
-
-        <div class="approval-section">
-            <div class="section-title">جدول الموافقات</div>
-            <table class="approval-table">
-                <thead>
-                    <tr>
-                        <th style="width: 12%">#</th>
-                        <th style="width: 14%">الطالب</th>
-                        <th style="width: 16%">المدير المباشر</th>
-                        <th style="width: 16%">الإدارة المالية</th>
-                        <th style="width: 14%">أمر الصرف</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    ${approvalTable}
-                </tbody>
-            </table>
-        </div>
-    </div>
-</body>
-</html>
-                `;
-                
-                printWindow.document.write(printContent);
-                printWindow.document.close();
-                
-                // انتظار تحميل الصفحة ثم الطباعة
-                printWindow.onload = function() {
-                    printWindow.print();
-                    printWindow.close();
-                };
-            }
-        }
-        
-        function printRequest(requestId) {
-            // فتح النافذة المنبثقة أولاً ثم طباعتها
-            viewRequest(requestId);
-            setTimeout(() => {
-                printCurrentRequest();
-            }, 500);
-        }
-        
-        // تحميل الطلبات عند فتح القسم
-        document.addEventListener('DOMContentLoaded', function() {
-            // إضافة مستمع للانتقال إلى قسم متابعة سير العملية
-            const trackRequestCard = document.querySelector('[onclick="showApp(\'track-request\')"]');
-            if (trackRequestCard) {
-                trackRequestCard.addEventListener('click', function() {
-                    setTimeout(() => {
-                        if (document.getElementById('track-request').classList.contains('active')) {
-                            loadRequests();
-                        }
-                    }, 100);
-                });
-            }
-        });
-
-        function enforceRoleAccess(requiredRole) {
-            const user = JSON.parse(localStorage.getItem('user') || '{}');
-            if (!user.role) return;
-            if (user.role !== requiredRole) {
-                if (user.role === 'admin') {
-                    window.location.href = 'admin-dashboard.html';
-                } else if (user.role === 'manager') {
-                    window.location.href = 'manager-dashboard.html';
-                } else if (user.role === 'finance') {
-                    window.location.href = 'finance-dashboard.html';
-                } else if (user.role === 'disbursement') {
-                    window.location.href = 'disbursement-dashboard.html';
-                } else {
-                    window.location.href = 'login.html';
-                }
-            }
-        }
-        // Navigation functionality
-        function showApp(appName) {
-            // Hide all app contents
-            const contents = document.querySelectorAll('.app-content');
-            contents.forEach(content => content.classList.remove('active'));
-            
-            // Remove active class from all nav buttons
-            const navBtns = document.querySelectorAll('.nav-btn');
-            navBtns.forEach(btn => btn.classList.remove('active'));
-            
-            // Show selected app content
-            document.getElementById(appName).classList.add('active');
-            
-            // Add active class to clicked button
-            event.target.classList.add('active');
-        }
-
-        function initTopNotifications() {
-            const btn = document.getElementById('topNotificationsBtn');
-            const badge = document.getElementById('topNotificationsBadge');
-            const panel = document.getElementById('topNotificationsPanel');
-            const list = document.getElementById('topNotificationsList');
-            const markBtn = document.getElementById('markTopNotificationsRead');
-
-            if (!btn || !badge || !panel || !list || !markBtn) {
-                return;
-            }
-
-            if (topNotificationsInitialized) {
-                if (topNotificationsIntervalId) {
-                    clearInterval(topNotificationsIntervalId);
-                }
-                loadTopNotifications(true);
-                topNotificationsIntervalId = setInterval(() => loadTopNotifications(true), 60000);
-                return;
-            }
-
-            btn.addEventListener('click', toggleTopNotificationsPanel);
-            markBtn.addEventListener('click', markAllTopNotificationsRead);
-            if (!topNotificationsOutsideClickRegistered) {
-                document.addEventListener('click', handleTopNotificationsOutsideClick);
-                topNotificationsOutsideClickRegistered = true;
-            }
-            topNotificationsInitialized = true;
-
-            loadTopNotifications(true);
-            topNotificationsIntervalId = setInterval(() => loadTopNotifications(true), 60000);
-        }
-
-        function clearTopNotificationsInterval() {
-            if (topNotificationsIntervalId) {
-                clearInterval(topNotificationsIntervalId);
-                topNotificationsIntervalId = null;
-            }
-        }
-
-        function teardownTopNotifications() {
-            topNotifications = [];
-            clearTopNotificationsInterval();
-            const badge = document.getElementById('topNotificationsBadge');
-            const panel = document.getElementById('topNotificationsPanel');
-            const list = document.getElementById('topNotificationsList');
-            if (badge) {
-                badge.style.display = 'none';
-                badge.textContent = '0';
-            }
-            if (panel) {
-                panel.classList.remove('active');
-                panel.style.display = 'none';
-            }
-            if (list) {
-                list.innerHTML = '<li class="top-notifications-empty">لا توجد إشعارات حالياً.</li>';
-            }
-        }
-
-        async function loadTopNotifications(silent = false) {
-            const token = localStorage.getItem('token');
-            if (!token) {
-                return;
-            }
-            try {
-                const response = await fetch(`${API_BASE}/notifications`, {
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (!response.ok) {
-                    if (!silent) {
-                        console.warn('فشل في جلب الإشعارات:', response.status);
-                    }
-                    return;
-                }
-                const data = await response.json();
-                topNotifications = Array.isArray(data) ? data : [];
-                renderTopNotifications();
-            } catch (error) {
-                if (!silent) {
-                    console.warn('خطأ أثناء جلب الإشعارات:', error);
-                }
-            }
-        }
-
-        function renderTopNotifications() {
-            const badge = document.getElementById('topNotificationsBadge');
-            const list = document.getElementById('topNotificationsList');
-            if (!badge || !list) return;
-
-            const unreadCount = topNotifications.filter(n => !n.is_read).length;
-            if (unreadCount > 0) {
-                badge.textContent = unreadCount;
-                badge.style.display = 'inline-flex';
-            } else {
-                badge.style.display = 'none';
-            }
-
-            if (!topNotifications.length) {
-                list.innerHTML = '<li class="top-notifications-empty">لا توجد إشعارات حالياً.</li>';
-                return;
-            }
-
-            list.innerHTML = topNotifications.map(notif => {
-                const createdAt = notif.created_at ? new Date(notif.created_at).toLocaleString('ar-SA') : '';
-                const noteLine = notif.note ? `<small>ملاحظة: ${notif.note}</small>` : '';
-                return `<li class="${notif.is_read ? '' : 'unread'}">
-                    <div>${notif.title || 'إشعار'}</div>
-                    <div>${notif.message || ''}</div>
-                    ${noteLine}
-                    <small>${createdAt}</small>
-                </li>`;
-            }).join('');
-        }
-
-        function toggleTopNotificationsPanel() {
-            const panel = document.getElementById('topNotificationsPanel');
-            if (!panel) return;
-            const willOpen = !panel.classList.contains('active');
-            if (willOpen) {
-                panel.classList.add('active');
-                panel.style.display = 'flex';
-                loadTopNotifications(true);
-            } else {
-                panel.classList.remove('active');
-                panel.style.display = 'none';
-            }
-        }
-
-        function handleTopNotificationsOutsideClick(event) {
-            const panel = document.getElementById('topNotificationsPanel');
-            const btn = document.getElementById('topNotificationsBtn');
-            if (!panel || !btn) return;
-            if (!panel.contains(event.target) && !btn.contains(event.target)) {
-                panel.classList.remove('active');
-                panel.style.display = 'none';
-            }
-        }
-
-        async function markAllTopNotificationsRead() {
-            const token = localStorage.getItem('token');
-            if (!token) return;
-            try {
-                const response = await fetch(`${API_BASE}/notifications/read-all`, {
-                    method: 'POST',
-                    headers: { 'Authorization': `Bearer ${token}` }
-                });
-                if (response.ok) {
-                    await loadTopNotifications(true);
-                }
-            } catch (error) {
-                console.warn('تعذر تعليم الإشعارات كمقروءة:', error);
-            }
-        }
-    </script>
-    
     <!-- Modal for viewing request details -->
-    <div id="requestModal" class="modal" style="display: none;">
+    <div id="requestModal" class="modal" style="display:none;">
         <div class="modal-content">
             <div class="modal-header">
                 <h2>تفاصيل الطلب</h2>
                 <span class="close" onclick="closeRequestModal()">&times;</span>
             </div>
-            <div class="modal-body" id="modalBody">
-                <!-- Request details will be loaded here -->
-            </div>
+            <div class="modal-body" id="modalBody"></div>
             <div class="modal-footer">
                 <button class="btn btn-secondary" onclick="closeRequestModal()">إغلاق</button>
                 <button class="btn btn-primary" onclick="printCurrentRequest()">طباعة</button>
             </div>
         </div>
     </div>
-    
-    <style>
-        /* Modal styles */
-        .modal {
-            position: fixed;
-            z-index: 1000;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0,0,0,0.5);
-            display: flex;
-            justify-content: center;
-            align-items: center;
-        }
-        
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 0;
-            border: none;
-            width: 90%;
-            max-width: 800px;
-            max-height: 90vh;
-            border-radius: 10px;
-            box-shadow: 0 4px 20px rgba(0,0,0,0.3);
-            overflow: hidden;
-        }
-        
-        .modal-header {
-            background: linear-gradient(135deg, #698163 0%, #5a6f56 100%);
-            color: white;
-            padding: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        
-        .modal-header h2 {
-            margin: 0;
-            font-size: 24px;
-        }
-        
-        .close {
-            color: white;
-            font-size: 28px;
-            font-weight: bold;
-            cursor: pointer;
-            line-height: 1;
-        }
-        
-        .close:hover {
-            opacity: 0.7;
-        }
-        
-        .modal-body {
-            padding: 20px;
-            max-height: 60vh;
-            overflow-y: auto;
-        }
-        
-        .modal-footer {
-            padding: 20px;
-            background-color: #f8f9fa;
-            display: flex;
-            justify-content: flex-end;
-            gap: 10px;
-        }
-        
-        .detail-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 15px;
-            margin-bottom: 20px;
-        }
-        
-        .detail-item {
-            display: flex;
-            flex-direction: column;
-            padding: 10px;
-            background-color: #f8f9fa;
-            border-radius: 5px;
-        }
-        
-        .detail-label {
-            font-weight: bold;
-            color: #698163;
-            margin-bottom: 5px;
-        }
-        
-        .detail-value {
-            color: #333;
-        }
-        
-        .items-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        .items-table th,
-        .items-table td {
-            border: 1px solid #ddd;
-            padding: 8px;
-            text-align: center;
-        }
-        
-        .items-table th {
-            background-color: #698163;
-            color: white;
-        }
-        
-        .items-table tr:nth-child(even) {
-            background-color: #f2f2f2;
-        }
-        
-        .btn {
-            padding: 10px 20px;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 14px;
-            font-weight: bold;
-        }
-        
-        .btn-primary {
-            background-color: #698163;
-            color: white;
-        }
-        
-        .btn-secondary {
-            background-color: #6c757d;
-            color: white;
-        }
-        
-        .btn:hover {
-            opacity: 0.8;
-        }
-        
-        @media print {
-            .modal {
-                position: static !important;
-                width: 100% !important;
-                height: auto !important;
-                background: transparent !important;
-            }
-            
-            .modal-content {
-                width: 100% !important;
-                max-width: none !important;
-                box-shadow: none !important;
-                border: none !important;
-            }
-            
-            .modal-header {
-                background: #698163 !important;
-                -webkit-print-color-adjust: exact;
-                color-adjust: exact;
-            }
-            
-            .modal-footer {
-                display: none !important;
-            }
-        }
-    </style>
-    </script>
+
+    <!-- Scripts -->
+    <script src="./js/toast.js"></script>
+    <script src="./js/shared.js"></script>
+    <script src="./js/requester.js"></script>
 </body>
+
 </html>
