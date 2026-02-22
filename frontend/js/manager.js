@@ -9,6 +9,7 @@ let filteredRequests = [];
 let approvedRequests = [];
 let rejectedRequests = [];
 let currentView = 'pending'; // 'pending', 'approved', 'rejected', 'reports'
+let filtersActive = false;
 
 // ==================== التهيئة ====================
 
@@ -134,7 +135,7 @@ function renderRequestsTable() {
   if (!tbody) return;
   tbody.innerHTML = '';
 
-  const displayRequests = filteredRequests.length > 0 ? filteredRequests : allRequests;
+  const displayRequests = filtersActive ? filteredRequests : allRequests;
 
   displayRequests.forEach(request => {
     const row = document.createElement('tr');
@@ -253,6 +254,8 @@ function applyFilters() {
     const matchesDateTo = !dateTo || (request.date && request.date <= dateTo);
     return matchesSearch && matchesStatus && matchesDepartment && matchesDateFrom && matchesDateTo;
   });
+
+  filtersActive = !!(search || status || department || dateFrom || dateTo);
 
   if (currentView === 'approved') renderApprovedRequestsTable(filtered);
   else if (currentView === 'rejected') renderRejectedRequestsTable(filtered);
