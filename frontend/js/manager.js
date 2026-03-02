@@ -141,6 +141,8 @@ function renderRequestsTable() {
     const row = document.createElement('tr');
     const status = request.status || 'pending_manager';
     const formattedTotal = formatCurrency(request.total_amount, request.currency);
+    row.style.cursor = 'pointer';
+    row.onclick = (e) => { if (!e.target.closest('button')) viewRequest(request.id); };
 
     row.innerHTML = `
       <td>${request.order_number || request.id}</td>
@@ -177,15 +179,17 @@ function renderApprovedRequestsTable(requestsToRender = null) {
     const status = request.status || 'approved';
     const formattedTotal = formatCurrency(request.total_amount, request.currency);
     const approvedDate = request.approved_at ? new Date(request.approved_at).toLocaleDateString('en-US') : '-';
+    row.style.cursor = 'pointer';
+    row.onclick = (e) => { if (!e.target.closest('button')) viewRequest(request.id); };
 
     row.innerHTML = `
       <td>${request.order_number || request.id}</td>
       <td>${request.requester}</td>
       <td>${request.department}</td>
       <td>${request.date || '-'}</td>
-          <td>${formattedTotal}</td>
+      <td>${formattedTotal}</td>
       <td><span class="status-badge status-${status}">${getStatusText(status)}</span></td>
-          <td>${approvedDate}</td>
+      <td>${approvedDate}</td>
       <td>
         <button class="action-btn btn-view" onclick="viewRequest(${request.id})">
           <i class="fas fa-eye"></i> عرض
@@ -210,15 +214,17 @@ function renderRejectedRequestsTable(requestsToRender = null) {
     const status = request.status || 'rejected';
     const formattedTotal = formatCurrency(request.total_amount, request.currency);
     const rejectedDate = request.rejected_at ? new Date(request.rejected_at).toLocaleDateString('en-US') : '-';
+    row.style.cursor = 'pointer';
+    row.onclick = (e) => { if (!e.target.closest('button')) viewRequest(request.id); };
 
     row.innerHTML = `
       <td>${request.order_number || request.id}</td>
       <td>${request.requester}</td>
       <td>${request.department}</td>
       <td>${request.date || '-'}</td>
-          <td>${formattedTotal}</td>
+      <td>${formattedTotal}</td>
       <td><span class="status-badge status-${status}">${getStatusText(status)}</span></td>
-          <td>${rejectedDate}</td>
+      <td>${rejectedDate}</td>
       <td>
         <button class="action-btn btn-view" onclick="viewRequest(${request.id})">
           <i class="fas fa-eye"></i> عرض
