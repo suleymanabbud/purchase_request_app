@@ -64,10 +64,9 @@ def migrate(old_db_path, new_db_path=NEW_DB):
         logger.info(f"أعمدة purchase_requests الجديدة: {len(new_pr_cols)}")
         logger.info(f"أعمدة purchase_requests القديمة: {len(old_pr_cols)}")
 
-        # === 2. جلب الطلبات المعتمدة من القديمة ===
+        # === 2. جلب جميع الطلبات من القديمة ===
         old_cur.execute("""
             SELECT * FROM purchase_requests 
-            WHERE status IN ('approved', 'completed')
             ORDER BY id
         """)
         old_requests = old_cur.fetchall()

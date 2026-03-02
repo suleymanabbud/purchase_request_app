@@ -182,9 +182,10 @@ function renderApprovedRequestsTable(requestsToRender = null) {
       <td>${request.order_number || request.id}</td>
       <td>${request.requester}</td>
       <td>${request.department}</td>
-      <td>${formattedTotal}</td>
+      <td>${request.date || '-'}</td>
+          <td>${formattedTotal}</td>
       <td><span class="status-badge status-${status}">${getStatusText(status)}</span></td>
-      <td>${approvedDate}</td>
+          <td>${approvedDate}</td>
       <td>
         <button class="action-btn btn-view" onclick="viewRequest(${request.id})">
           <i class="fas fa-eye"></i> عرض
@@ -195,7 +196,7 @@ function renderApprovedRequestsTable(requestsToRender = null) {
   });
 
   if (requests.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7">لا توجد طلبات معتمدة حالياً.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8">لا توجد طلبات معتمدة حالياً.</td></tr>`;
   }
 }
 
@@ -214,9 +215,10 @@ function renderRejectedRequestsTable(requestsToRender = null) {
       <td>${request.order_number || request.id}</td>
       <td>${request.requester}</td>
       <td>${request.department}</td>
-      <td>${formattedTotal}</td>
+      <td>${request.date || '-'}</td>
+          <td>${formattedTotal}</td>
       <td><span class="status-badge status-${status}">${getStatusText(status)}</span></td>
-      <td>${rejectedDate}</td>
+          <td>${rejectedDate}</td>
       <td>
         <button class="action-btn btn-view" onclick="viewRequest(${request.id})">
           <i class="fas fa-eye"></i> عرض
@@ -227,7 +229,7 @@ function renderRejectedRequestsTable(requestsToRender = null) {
   });
 
   if (requests.length === 0) {
-    tbody.innerHTML = `<tr><td colspan="7">لا توجد طلبات مرفوضة حالياً.</td></tr>`;
+    tbody.innerHTML = `<tr><td colspan="8">لا توجد طلبات مرفوضة حالياً.</td></tr>`;
   }
 }
 
@@ -472,6 +474,13 @@ async function showApprovedRequests() {
   event.target.closest('.menu-item').classList.add('active');
   document.querySelector('.page-title').textContent = 'الطلبات المعتمدة';
 
+  // تحديث عناوين الجدول
+  const thead = document.querySelector('.requests-table thead tr');
+  if (thead) thead.innerHTML = `
+    <th>رقم الطلب</th><th>مقدم الطلب</th><th>القسم</th>
+    <th>تاريخ الطلب</th><th>المبلغ الإجمالي</th><th>الحالة</th>
+    <th>تاريخ الاعتماد</th><th>الإجراءات</th>`;
+
   try {
     const res = await apiFetch('/my/approved');
     if (res.ok) { approvedRequests = await res.json(); renderApprovedRequestsTable(); }
@@ -484,6 +493,13 @@ async function showRejectedRequests() {
   document.querySelectorAll('.menu-item').forEach(item => item.classList.remove('active'));
   event.target.closest('.menu-item').classList.add('active');
   document.querySelector('.page-title').textContent = 'الطلبات المرفوضة';
+
+  // تحديث عناوين الجدول
+  const thead = document.querySelector('.requests-table thead tr');
+  if (thead) thead.innerHTML = `
+    <th>رقم الطلب</th><th>مقدم الطلب</th><th>القسم</th>
+    <th>تاريخ الطلب</th><th>المبلغ الإجمالي</th><th>الحالة</th>
+    <th>تاريخ الرفض</th><th>الإجراءات</th>`;
 
   try {
     const res = await apiFetch('/my/rejected');
